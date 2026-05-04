@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2022", "DOM"],
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": ".",
+    "paths": {
+      "@svh/ui/*": ["packages/ui/src/*"],
+      "@svh/types/*": ["packages/types/src/*"],
+      "@svh/config/*": ["packages/config/src/*"],
+      "@svh/utils/*": ["packages/utils/src/*"]
+    }
+  }
+}

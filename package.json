@@ -1,0 +1,13 @@
+{
+  "name": "svh-speakup",
+  "private": true,
+  "version": "0.1.0",
+  "packageManager": "pnpm@10.0.0",
+  "scripts": {
+    "dev:reporter": "pnpm --filter reporter-portal dev",
+    "dev:investigator": "pnpm --filter investigator-portal dev",
+    "dev:api": "pnpm --filter api dev",
+    "build": "pnpm -r build",
+    "typecheck": "pnpm -r typecheck"
+  }
+}

@@ -1,0 +1,459 @@
+:root {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  color: #12243d;
+  background:
+    radial-gradient(circle at top right, rgba(236, 169, 91, 0.18), transparent 25%),
+    radial-gradient(circle at bottom left, rgba(50, 96, 169, 0.12), transparent 30%),
+    linear-gradient(180deg, #ffffff 0%, #f7f8fb 100%);
+  line-height: 1.5;
+  font-weight: 400;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: transparent;
+}
+
+a {
+  color: inherit;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+.shell {
+  width: min(1120px, calc(100% - 2rem));
+  margin: 0 auto;
+  padding: 0 0 4rem;
+}
+
+.shell.narrow {
+  width: min(840px, calc(100% - 2rem));
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding-top: 1.25rem;
+  padding-bottom: 1.25rem;
+}
+
+.brand-lockup img {
+  display: block;
+  width: 240px;
+  max-width: 100%;
+}
+
+.brand-lockup.compact img {
+  width: 210px;
+}
+
+.topnav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+  font-weight: 600;
+}
+
+.topnav a {
+  color: #21456f;
+  text-decoration: none;
+}
+
+.hero {
+  position: relative;
+  overflow: hidden;
+  margin-top: 1.25rem;
+}
+
+.hero-faceup {
+  display: grid;
+  place-items: center;
+  min-height: 540px;
+  padding: 4.5rem 2rem 3.5rem;
+  border: 1px solid rgba(18, 36, 61, 0.08);
+  border-radius: 36px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.97), rgba(248, 250, 253, 0.97));
+  box-shadow: 0 30px 70px rgba(18, 36, 61, 0.08);
+}
+
+.hero-mark {
+  position: absolute;
+  inset: auto auto -10% -6%;
+  width: min(680px, 70vw);
+  opacity: 0.17;
+  pointer-events: none;
+}
+
+.hero-mark-image {
+  width: 100%;
+  display: block;
+}
+
+.hero-copy-centered {
+  position: relative;
+  z-index: 1;
+  max-width: 760px;
+  text-align: center;
+}
+
+.hero-copy,
+.summary-card,
+.content-panel,
+.governance-card,
+.venture-card,
+.simple-card,
+.privacy-card,
+.form-card,
+.confirmation-card {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(17, 32, 59, 0.08);
+  border-radius: 24px;
+  box-shadow: 0 20px 50px rgba(17, 32, 59, 0.08);
+}
+
+.hero-copy h1,
+.page-top h1,
+.confirmation-card h1,
+.report-intro h1 {
+  font-size: clamp(2.4rem, 5vw, 4.8rem);
+  line-height: 1.05;
+  margin: 0.25rem 0 1rem;
+}
+
+.eyebrow {
+  margin: 0;
+  color: #006a8e;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.lede {
+  font-size: 1.08rem;
+  color: #41536e;
+}
+
+.centered-copy {
+  max-width: 660px;
+  margin-inline: auto;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.actions-centered {
+  justify-content: center;
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 0.75rem 1.1rem;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    transform 150ms ease,
+    box-shadow 150ms ease;
+}
+
+.button:hover {
+  transform: translateY(-1px);
+}
+
+.button.primary {
+  background: linear-gradient(135deg, #204973 0%, #0f75a8 100%);
+  color: #ffffff;
+  box-shadow: 0 12px 24px rgba(15, 117, 168, 0.24);
+}
+
+.button.secondary {
+  background: #ffffff;
+  border-color: rgba(17, 32, 59, 0.12);
+}
+
+.summary-card,
+.content-panel,
+.confirmation-card {
+  padding: 1.5rem;
+}
+
+.content-panel {
+  margin-top: 1.5rem;
+  padding: 2rem;
+}
+
+.content-panel-simple {
+  max-width: 720px;
+  margin-inline: auto;
+  margin-top: 1rem;
+}
+
+.section-head h2 {
+  margin: 0.35rem 0 0.75rem;
+  font-size: clamp(1.7rem, 3vw, 2.7rem);
+}
+
+.simple-info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  max-width: 900px;
+  margin: 1.25rem auto 0;
+}
+
+.simple-card {
+  padding: 1.5rem;
+}
+
+.venture-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.venture-tag,
+.venture-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  min-height: 34px;
+  padding: 0.35rem 0.8rem;
+  border-radius: 999px;
+  background: rgba(32, 73, 115, 0.08);
+  color: #204973;
+  font-size: 0.86rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+.venture-badge {
+  margin-bottom: 0.8rem;
+  background: rgba(236, 169, 91, 0.16);
+  color: #7f4f0b;
+}
+
+.check-list {
+  padding-left: 1.2rem;
+  margin: 0.75rem 0 0;
+}
+
+.check-list.compact li + li {
+  margin-top: 0.35rem;
+}
+
+.check-list li + li {
+  margin-top: 0.6rem;
+}
+
+.report-shell {
+  padding-top: 1rem;
+}
+
+.report-intro {
+  padding: 1.5rem 0 1rem;
+  text-align: center;
+}
+
+.page-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: end;
+  margin-bottom: 1.5rem;
+}
+
+.text-link {
+  color: #006a8e;
+}
+
+.form-card {
+  padding: 1.5rem;
+}
+
+.form-card-faceup {
+  padding: 2rem;
+  border-radius: 28px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.field-span-2 {
+  grid-column: span 2;
+}
+
+.field input,
+.field select,
+.field textarea {
+  width: 100%;
+  border: 1px solid rgba(17, 32, 59, 0.12);
+  border-radius: 16px;
+  padding: 0.85rem 1rem;
+  background: #ffffff;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.85);
+}
+
+.field textarea {
+  resize: vertical;
+}
+
+.notice-block {
+  margin: 1.5rem 0;
+  padding: 1rem 1.1rem;
+  border-radius: 18px;
+  background: #f1f8fc;
+}
+
+.checkbox {
+  display: flex;
+  align-items: start;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.checkbox input {
+  margin-top: 0.25rem;
+}
+
+.field-error {
+  margin: 0;
+  color: #b42318;
+  font-size: 0.92rem;
+}
+
+.error-banner {
+  margin-top: 1rem;
+  padding: 0.85rem 1rem;
+  border-radius: 16px;
+  background: #fff1f2;
+  color: #9f1239;
+}
+
+.submit-row {
+  margin-top: 1.5rem;
+}
+
+.credential-list {
+  display: grid;
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+.credential-list div {
+  padding: 1rem;
+  border-radius: 18px;
+  background: #f7fafc;
+}
+
+.credential-list dt {
+  font-size: 0.85rem;
+  color: #5d6b82;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.credential-list dd {
+  margin: 0.35rem 0 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.email-capture-card {
+  margin-top: 1.5rem;
+  padding: 1.25rem;
+  border-radius: 22px;
+  background: #f4f8fd;
+}
+
+.email-toggle-line {
+  display: block;
+  margin-bottom: 0.85rem;
+  font-weight: 600;
+  color: #1b3554;
+}
+
+.email-capture-row {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.email-capture-input {
+  flex: 1;
+  min-height: 48px;
+  padding: 0.85rem 1rem;
+  border: 1px solid rgba(17, 32, 59, 0.12);
+  border-radius: 16px;
+  background: #ffffff;
+}
+
+@media (max-width: 800px) {
+  .simple-info-grid,
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .field-span-2 {
+    grid-column: span 1;
+  }
+
+  .topbar {
+    flex-direction: column;
+    align-items: start;
+  }
+
+  .topnav {
+    gap: 0.85rem;
+  }
+
+  .page-top {
+    flex-direction: column;
+    align-items: start;
+  }
+
+  .hero-faceup {
+    min-height: 480px;
+    padding-inline: 1.25rem;
+  }
+
+  .hero-mark {
+    width: 110%;
+    left: -12%;
+    bottom: -4%;
+  }
+
+  .email-capture-row {
+    flex-direction: column;
+  }
+}
