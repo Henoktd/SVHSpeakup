@@ -41,6 +41,9 @@ const reportDetailsFields: Array<keyof ReportFormValues> = [
   "evidenceNotes"
 ];
 
+const maxEvidenceFiles = 5;
+const maxEvidenceFileSizeBytes = 10 * 1024 * 1024;
+
 export function ReportPage() {
   const navigate = useNavigate();
   const [categoryOptions, setCategoryOptions] = useState<ReportCategoryOption[]>(
@@ -50,6 +53,8 @@ export function ReportPage() {
   const [optionsError, setOptionsError] = useState<string | null>(null);
   const [isLoadingOptions, setIsLoadingOptions] = useState(true);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [evidenceError, setEvidenceError] = useState<string | null>(null);
+  const [evidenceFiles, setEvidenceFiles] = useState<File[]>([]);
 
   const form = useForm<ReportFormValues>({
     resolver: zodResolver(createReportSchema),
@@ -151,8 +156,13 @@ export function ReportPage() {
     setSubmitError(null);
 
     try {
-      const payload = createReportSchema.parse(values);
-      const result = await createReport(payload);
+      const payload = createReportSchema.parse({
+        ...values,
+        presidentialEscalationReason:
+          buildPresidentialEscalationReason(values),
+        presidentialEscalationOtherDetail: ""
+      });
+      const result = await createReport(payload, evidenceFiles);
 
       navigate("/confirmation", {
         state: result
@@ -174,6 +184,29 @@ export function ReportPage() {
       shouldDirty: true,
       shouldValidate: true
     });
+  }
+
+  function handleEvidenceFilesChange(
+    event: React.ChangeEvent<HTMLInputElement>
+  ) {
+    const selectedFiles = Array.from(event.currentTarget.files ?? []);
+    const acceptedFiles = selectedFiles
+      .filter((file) => file.size <= maxEvidenceFileSizeBytes)
+      .slice(0, maxEvidenceFiles);
+
+    setEvidenceFiles(acceptedFiles);
+
+    if (selectedFiles.length > maxEvidenceFiles) {
+      setEvidenceError(`Upload up to ${maxEvidenceFiles} evidence files.`);
+      return;
+    }
+
+    if (selectedFiles.some((file) => file.size > maxEvidenceFileSizeBytes)) {
+      setEvidenceError("Each evidence file must be 10 MB or smaller.");
+      return;
+    }
+
+    setEvidenceError(null);
   }
 
   async function goToEscalationStep() {
@@ -319,7 +352,7 @@ export function ReportPage() {
                   <label className="field">
                     <span>When did it happen?</span>
                     <input
-                      placeholder="For example: 2026-05-01 or 1 May 2026"
+                      type="datetime-local"
                       {...form.register("incidentDateText")}
                     />
                     <FieldError
@@ -354,6 +387,30 @@ export function ReportPage() {
                       placeholder="Optional notes about files, screenshots, or witnesses"
                       {...form.register("evidenceNotes")}
                     />
+                  </label>
+
+                  <label className="field field-span-2">
+                    <span>Evidence files</span>
+                    <input
+                      accept=".pdf,.png,.jpg,.jpeg,.doc,.docx,.xls,.xlsx,.txt,.eml,.msg,image/*,application/pdf"
+                      multiple
+                      onChange={handleEvidenceFilesChange}
+                      type="file"
+                    />
+                    <p className="field-hint">
+                      Up to {maxEvidenceFiles} files, 10 MB each.
+                    </p>
+                    {evidenceFiles.length > 0 ? (
+                      <ul className="file-list">
+                        {evidenceFiles.map((file) => (
+                          <li key={`${file.name}-${file.lastModified}`}>
+                            <span>{file.name}</span>
+                            <span>{formatFileSize(file.size)}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    ) : null}
+                    <FieldError message={evidenceError ?? undefined} />
                   </label>
                 </div>
               </section>
@@ -416,24 +473,6 @@ export function ReportPage() {
                       />
                     </label>
 
-                    <label className="field field-span-2">
-                      <span>
-                        Why should this be escalated directly to the President?
-                      </span>
-                      <textarea
-                        maxLength={100}
-                        rows={4}
-                        placeholder="Explain why direct presidential escalation is necessary."
-                        {...form.register("presidentialEscalationReason")}
-                      />
-                      <FieldError
-                        message={
-                          form.formState.errors.presidentialEscalationReason
-                            ?.message
-                        }
-                      />
-                    </label>
-
                     {raisedThroughNormalChannels === true ? (
                       <label className="field field-span-2">
                         <span>If yes, what action was taken or not taken?</span>
@@ -453,7 +492,9 @@ export function ReportPage() {
                     ) : null}
 
                     <div className="field field-span-2">
-                      <span>Select all that apply</span>
+                      <span>
+                        Why should this be escalated directly to the President?
+                      </span>
                       <div className="checkbox-card-grid">
                         {presidentialEscalationFactorValues.map((factor) => (
                           <label
@@ -483,23 +524,6 @@ export function ReportPage() {
                       />
                     </div>
 
-                    {selectedEscalationFactors.includes("other") ? (
-                      <label className="field field-span-2">
-                        <span>Other detail</span>
-                        <textarea
-                          maxLength={100}
-                          rows={3}
-                          placeholder="Describe the other factor that applies."
-                          {...form.register("presidentialEscalationOtherDetail")}
-                        />
-                        <FieldError
-                          message={
-                            form.formState.errors
-                              .presidentialEscalationOtherDetail?.message
-                          }
-                        />
-                      </label>
-                    ) : null}
                   </div>
                 </section>
 
@@ -592,6 +616,26 @@ export function ReportPage() {
       </main>
     </>
   );
+}
+
+function buildPresidentialEscalationReason(values: ReportFormValues) {
+  const selectedFactors = values.presidentialEscalationFactors ?? [];
+
+  if (selectedFactors.length === 0) {
+    return "";
+  }
+
+  return `Selected escalation factors: ${selectedFactors
+    .map((factor) => presidentialEscalationFactorLabels[factor])
+    .join(", ")}`;
+}
+
+function formatFileSize(size: number) {
+  if (size < 1024 * 1024) {
+    return `${Math.max(1, Math.round(size / 1024))} KB`;
+  }
+
+  return `${(size / (1024 * 1024)).toFixed(1)} MB`;
 }
 
 function FieldError({ message }: { message?: string }) {

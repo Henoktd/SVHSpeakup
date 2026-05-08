@@ -25,7 +25,7 @@ export function sanitizeReportPayload(
       payload.normalChannelActionSummary
     ),
     presidentialEscalationReason: sanitizeText(
-      payload.presidentialEscalationReason
+      payload.presidentialEscalationReason ?? ""
     ),
     presidentialEscalationOtherDetail: sanitizeText(
       payload.presidentialEscalationOtherDetail

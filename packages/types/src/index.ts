@@ -76,13 +76,18 @@ export const createReportSchema = z.object({
   incidentDateText: z.string().trim().min(2).max(140),
   locationText: z.string().trim().min(2).max(100),
   peopleInvolved: z.string().trim().max(100).optional().or(z.literal("")),
-  evidenceNotes: z.string().trim().max(100).optional().or(z.literal("")),
+  evidenceNotes: z.string().trim().max(500).optional().or(z.literal("")),
   raisedThroughNormalChannels: z.boolean({
     required_error:
       "Select whether the issue has already been raised through normal channels."
   }),
   normalChannelActionSummary: z.string().trim().max(100),
-  presidentialEscalationReason: z.string().trim().min(10).max(100),
+  presidentialEscalationReason: z
+    .string()
+    .trim()
+    .max(300)
+    .optional()
+    .or(z.literal("")),
   presidentialEscalationFactors: z
     .array(z.enum(presidentialEscalationFactorValues))
     .min(1, {
@@ -118,17 +123,6 @@ export const createReportSchema = z.object({
       code: z.ZodIssueCode.custom,
       message: "Summarize what action was taken or not taken.",
       path: ["normalChannelActionSummary"]
-    });
-  }
-
-  if (
-    value.presidentialEscalationFactors.includes("other") &&
-    value.presidentialEscalationOtherDetail.trim().length < 2
-  ) {
-    context.addIssue({
-      code: z.ZodIssueCode.custom,
-      message: "Describe the other escalation factor.",
-      path: ["presidentialEscalationOtherDetail"]
     });
   }
 });

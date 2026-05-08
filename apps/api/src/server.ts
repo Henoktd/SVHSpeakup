@@ -1,7 +1,10 @@
+import { randomUUID } from "node:crypto";
 import fs from "node:fs";
+import { mkdir, writeFile } from "node:fs/promises";
 import { config as loadEnv } from "dotenv";
 import cors from "cors";
 import express from "express";
+import multer from "multer";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import {
@@ -38,6 +41,13 @@ for (const envPath of envCandidates) {
 
 const app = express();
 const port = Number(process.env.PORT ?? 3001);
+const evidenceUpload = multer({
+  storage: multer.memoryStorage(),
+  limits: {
+    files: 5,
+    fileSize: 10 * 1024 * 1024
+  }
+});
 const appConfig = getAppConfig();
 const reportRepository = new DataverseReportRepository(appConfig.dataverse);
 const reporterEmailService = new ReporterEmailService(appConfig);
@@ -58,6 +68,83 @@ app.use(
   })
 );
 app.use(express.json());
+
+function parseCreateReportBody(request: express.Request): unknown {
+  if (typeof request.body?.payload === "string") {
+    return JSON.parse(request.body.payload);
+  }
+
+  return request.body;
+}
+
+function getEvidenceFiles(request: express.Request): Express.Multer.File[] {
+  return Array.isArray(request.files) ? request.files : [];
+}
+
+function sanitizeFileName(fileName: string): string {
+  return fileName
+    .replace(/[/\\?%*:|"<>]/g, "-")
+    .replace(/\s+/g, " ")
+    .trim()
+    .slice(0, 120);
+}
+
+function appendEvidenceFileSummary(
+  payload: unknown,
+  files: Express.Multer.File[]
+): unknown {
+  if (
+    !payload ||
+    typeof payload !== "object" ||
+    Array.isArray(payload) ||
+    files.length === 0
+  ) {
+    return payload;
+  }
+
+  const submittedPayload = payload as Record<string, unknown>;
+  const existingNotes =
+    typeof submittedPayload.evidenceNotes === "string"
+      ? submittedPayload.evidenceNotes.trim()
+      : "";
+  const fileSummary = `Evidence files uploaded: ${files
+    .map((file) => sanitizeFileName(file.originalname || "unnamed file"))
+    .join(", ")}`;
+  const evidenceNotes = [existingNotes, fileSummary]
+    .filter(Boolean)
+    .join("\n")
+    .slice(0, 500);
+
+  return {
+    ...submittedPayload,
+    evidenceNotes
+  };
+}
+
+async function saveEvidenceFiles(
+  caseId: string,
+  files: Express.Multer.File[]
+): Promise<void> {
+  if (files.length === 0) {
+    return;
+  }
+
+  const uploadRoot =
+    process.env.EVIDENCE_UPLOAD_DIR ??
+    path.resolve(process.env.HOME ?? currentDirectory, "svh-speakup-evidence");
+  const caseUploadDirectory = path.join(uploadRoot, caseId);
+
+  await mkdir(caseUploadDirectory, { recursive: true });
+
+  await Promise.all(
+    files.map((file, index) => {
+      const safeName = sanitizeFileName(file.originalname || "evidence-file");
+      const fileName = `${String(index + 1).padStart(2, "0")}-${randomUUID()}-${safeName}`;
+
+      return writeFile(path.join(caseUploadDirectory, fileName), file.buffer);
+    })
+  );
+}
 
 app.get("/health", (_request, response) => {
   response.json({
@@ -88,39 +175,58 @@ app.get("/api/reports/options", async (_request, response) => {
   }
 });
 
-app.post("/api/reports", async (request, response) => {
-  const parsed = createReportSchema.safeParse(request.body);
+app.post(
+  "/api/reports",
+  evidenceUpload.array("evidenceFiles", 5),
+  async (request, response) => {
+    let requestBody: unknown;
 
-  if (!parsed.success) {
-    response.status(400).json({
-      message: "Invalid request body.",
-      issues: parsed.error.flatten()
+    try {
+      requestBody = parseCreateReportBody(request);
+    } catch {
+      response.status(400).json({
+        message: "Invalid report payload."
+      });
+      return;
+    }
+
+    const evidenceFiles = getEvidenceFiles(request);
+    const parsed = createReportSchema.safeParse(
+      appendEvidenceFileSummary(requestBody, evidenceFiles)
+    );
+
+    if (!parsed.success) {
+      response.status(400).json({
+        message: "Invalid request body.",
+        issues: parsed.error.flatten()
+      });
+      return;
+    }
+
+    const sanitizedInput = sanitizeReportPayload(parsed.data);
+    const record = createCaseRecord(sanitizedInput);
+    const auditEvent = createAuditEvent(record.caseId);
+
+    try {
+      await saveEvidenceFiles(record.caseId, evidenceFiles);
+      await reportRepository.createReport(record, auditEvent);
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "Unable to create report.";
+
+      response.status(500).json({
+        message
+      });
+      return;
+    }
+
+    response.status(201).json({
+      caseId: record.caseId,
+      secret: record.secret,
+      submittedAt: record.submittedAt
     });
-    return;
   }
-
-  const sanitizedInput = sanitizeReportPayload(parsed.data);
-  const record = createCaseRecord(sanitizedInput);
-  const auditEvent = createAuditEvent(record.caseId);
-
-  try {
-    await reportRepository.createReport(record, auditEvent);
-  } catch (error) {
-    const message =
-      error instanceof Error ? error.message : "Unable to create report.";
-
-    response.status(500).json({
-      message
-    });
-    return;
-  }
-
-  response.status(201).json({
-    caseId: record.caseId,
-    secret: record.secret,
-    submittedAt: record.submittedAt
-  });
-});
+);
 
 app.post("/api/reports/access", async (request, response) => {
   const parsed = reporterAccessSchema.safeParse(request.body);

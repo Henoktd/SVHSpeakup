@@ -390,6 +390,41 @@ textarea {
   resize: vertical;
 }
 
+.field-hint {
+  margin: 0;
+  color: #607089;
+  font-size: 0.9rem;
+}
+
+.file-list {
+  display: grid;
+  gap: 0.5rem;
+  margin: 0.25rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.file-list li {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.65rem 0.75rem;
+  border-radius: 14px;
+  background: #f6f8fc;
+  color: #183151;
+  font-size: 0.92rem;
+}
+
+.file-list span:first-child {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.file-list span:last-child {
+  flex: 0 0 auto;
+  color: #607089;
+}
+
 .notice-block {
   margin: 1.5rem 0;
   padding: 1rem 1.1rem;

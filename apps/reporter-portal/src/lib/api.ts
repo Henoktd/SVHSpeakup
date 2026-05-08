@@ -12,8 +12,31 @@ const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL ?? "http://localhost:3001";
 
 export async function createReport(
-  payload: CreateReportRequest
+  payload: CreateReportRequest,
+  evidenceFiles: File[] = []
 ): Promise<CreateReportResponse> {
+  if (evidenceFiles.length > 0) {
+    const formData = new FormData();
+
+    formData.append("payload", JSON.stringify(payload));
+
+    for (const file of evidenceFiles) {
+      formData.append("evidenceFiles", file);
+    }
+
+    const response = await fetch(`${API_BASE_URL}/api/reports`, {
+      method: "POST",
+      body: formData
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(errorText || "Unable to submit report.");
+    }
+
+    return response.json() as Promise<CreateReportResponse>;
+  }
+
   const response = await fetch(`${API_BASE_URL}/api/reports`, {
     method: "POST",
     headers: {
