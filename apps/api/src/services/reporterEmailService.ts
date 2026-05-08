@@ -1,5 +1,5 @@
 import nodemailer from "nodemailer";
-import type { AppConfig } from "../config/appConfig";
+import type { AppConfig } from "../config/appConfig.js";
 
 interface SendReporterAccessEmailInput {
   caseId: string;

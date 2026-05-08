@@ -7,11 +7,11 @@ import type {
   InvestigatorCaseListItem,
   ReportCategoryOption,
   ReporterCaseAccessResponse
-} from "@svh/types";
-import { reportCategoryValues } from "@svh/types";
-import type { AppConfig } from "../config/appConfig";
-import type { DataverseChoiceOption } from "./dataverseClient";
-import { DataverseClient } from "./dataverseClient";
+} from "../../../../packages/types/src/index.js";
+import { reportCategoryValues } from "../../../../packages/types/src/index.js";
+import type { AppConfig } from "../config/appConfig.js";
+import type { DataverseChoiceOption } from "./dataverseClient.js";
+import { DataverseClient } from "./dataverseClient.js";
 
 interface ChoiceLookupItem {
   key: string;

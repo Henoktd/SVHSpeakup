@@ -66,6 +66,8 @@ const envSchema = z.object({
   SMTP_PASSWORD: z.string().optional(),
   SMTP_FROM: z.string().optional(),
   REPORTER_PORTAL_URL: z.string().url().default("http://localhost:5173"),
+  INVESTIGATOR_PORTAL_URL: z.string().url().optional(),
+  CORS_ALLOWED_ORIGINS: z.string().optional(),
   INVESTIGATOR_AUTH_ENABLED: z.coerce.boolean().default(false),
   INVESTIGATOR_ENTRA_TENANT_ID: z.string().min(1).optional(),
   INVESTIGATOR_API_AUDIENCES: z.string().optional(),
@@ -143,7 +145,9 @@ export interface AppConfig {
     allowedRoleValues: string[];
     allowedUserOids: string[];
   };
+  corsAllowedOrigins: string[];
   reporterPortalUrl: string;
+  investigatorPortalUrl?: string;
 }
 
 let cachedConfig: AppConfig | null = null;
@@ -179,6 +183,14 @@ function parseStringList(rawValue: string | undefined): string[] {
     .filter(Boolean);
 }
 
+function toOrigin(urlOrOrigin: string): string {
+  try {
+    return new URL(urlOrOrigin).origin;
+  } catch {
+    return urlOrOrigin.trim();
+  }
+}
+
 export function getAppConfig(): AppConfig {
   if (cachedConfig) {
     return cachedConfig;
@@ -207,6 +219,21 @@ export function getAppConfig(): AppConfig {
     investigatorAllowedGroupIds.length > 0 ||
     investigatorAllowedRoleValues.length > 0 ||
     investigatorAllowedUserOids.length > 0;
+  const corsAllowedOrigins = Array.from(
+    new Set(
+      [
+        "http://127.0.0.1:5173",
+        "http://localhost:5173",
+        "http://127.0.0.1:5174",
+        "http://localhost:5174",
+        parsed.REPORTER_PORTAL_URL,
+        parsed.INVESTIGATOR_PORTAL_URL,
+        ...parseStringList(parsed.CORS_ALLOWED_ORIGINS)
+      ]
+        .filter((value): value is string => Boolean(value))
+        .map((value) => toOrigin(value))
+    )
+  );
 
   cachedConfig = {
     dataverse: {
@@ -306,7 +333,9 @@ export function getAppConfig(): AppConfig {
       allowedRoleValues: investigatorAllowedRoleValues,
       allowedUserOids: investigatorAllowedUserOids
     },
-    reporterPortalUrl: parsed.REPORTER_PORTAL_URL
+    corsAllowedOrigins,
+    reporterPortalUrl: parsed.REPORTER_PORTAL_URL,
+    investigatorPortalUrl: parsed.INVESTIGATOR_PORTAL_URL
   };
 
   return cachedConfig;

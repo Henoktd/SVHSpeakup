@@ -2,13 +2,13 @@ import type {
   CreateAuditEvent,
   CreateCaseRecord,
   CreateReportRequest
-} from "@svh/types";
+} from "../../../../packages/types/src/index.js";
 import {
   generateCaseId,
   generateReporterSecret,
   hashSecret,
   sanitizeText
-} from "@svh/utils";
+} from "../../../../packages/utils/src/index.js";
 
 export function sanitizeReportPayload(
   payload: CreateReportRequest

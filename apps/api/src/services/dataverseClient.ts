@@ -1,4 +1,4 @@
-import type { AppConfig } from "../config/appConfig";
+import type { AppConfig } from "../config/appConfig.js";
 
 interface AccessTokenResponse {
   access_token: string;

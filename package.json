@@ -7,6 +7,9 @@
     "dev:reporter": "pnpm --filter reporter-portal dev",
     "dev:investigator": "pnpm --filter investigator-portal dev",
     "dev:api": "pnpm --filter api dev",
+    "build:reporter": "pnpm --filter reporter-portal build",
+    "build:investigator": "pnpm --filter investigator-portal build",
+    "build:api": "pnpm --filter api build",
     "build": "pnpm -r build",
     "typecheck": "pnpm -r typecheck"
   }

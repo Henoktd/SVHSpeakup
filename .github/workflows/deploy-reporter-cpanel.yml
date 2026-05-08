@@ -1,0 +1,53 @@
+name: Deploy Reporter Portal to cPanel
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: cpanel-reporter-deploy
+  cancel-in-progress: true
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build reporter portal
+        env:
+          VITE_API_BASE_URL: ${{ secrets.REPORTER_VITE_API_BASE_URL }}
+        run: pnpm --filter reporter-portal build
+
+      - name: Deploy reporter portal to cPanel
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.CPANEL_FTP_SERVER }}
+          username: ${{ secrets.CPANEL_FTP_USERNAME }}
+          password: ${{ secrets.CPANEL_FTP_PASSWORD }}
+          protocol: ftps
+          port: ${{ secrets.CPANEL_FTP_PORT || 21 }}
+          security: loose
+          timeout: 120000
+          log-level: verbose
+          local-dir: ./apps/reporter-portal/dist/
+          server-dir: ${{ secrets.REPORTER_CPANEL_REMOTE_DIR }}
+          dangerous-clean-slate: false

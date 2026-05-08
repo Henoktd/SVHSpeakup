@@ -1,3 +1,4 @@
+import fs from "node:fs";
 import { config as loadEnv } from "dotenv";
 import cors from "cors";
 import express from "express";
@@ -7,24 +8,31 @@ import {
   createReportSchema,
   reporterAccessSchema,
   saveReporterEmailSchema
-} from "@svh/types";
-import { hashSecret } from "@svh/utils";
-import { getAppConfig } from "./config/appConfig";
-import { DataverseReportRepository } from "./services/dataverseReportRepository";
-import { createInvestigatorAuthMiddleware } from "./services/investigatorAuth";
-import { ReporterEmailService } from "./services/reporterEmailService";
+} from "../../../packages/types/src/index.js";
+import { hashSecret } from "../../../packages/utils/src/index.js";
+import { getAppConfig } from "./config/appConfig.js";
+import { DataverseReportRepository } from "./services/dataverseReportRepository.js";
+import { createInvestigatorAuthMiddleware } from "./services/investigatorAuth.js";
+import { ReporterEmailService } from "./services/reporterEmailService.js";
 import {
   createAuditEvent,
   createCaseRecord,
   sanitizeReportPayload
-} from "./services/reportService";
+} from "./services/reportService.js";
 
 const currentFilePath = fileURLToPath(import.meta.url);
 const currentDirectory = path.dirname(currentFilePath);
 
-loadEnv({
-  path: path.resolve(currentDirectory, "../../../.env")
-});
+const rootEnvPath = path.resolve(currentDirectory, "../../../.env");
+const localEnvPath = path.resolve(currentDirectory, "../.env");
+
+if (fs.existsSync(rootEnvPath)) {
+  loadEnv({ path: rootEnvPath });
+}
+
+if (fs.existsSync(localEnvPath)) {
+  loadEnv({ path: localEnvPath, override: true });
+}
 
 const app = express();
 const port = Number(process.env.PORT ?? 3001);
@@ -37,12 +45,14 @@ const investigatorAuthMiddleware = createInvestigatorAuthMiddleware(
 
 app.use(
   cors({
-    origin: [
-      "http://127.0.0.1:5173",
-      "http://localhost:5173",
-      "http://127.0.0.1:5174",
-      "http://localhost:5174"
-    ]
+    origin: (origin, callback) => {
+      if (!origin || appConfig.corsAllowedOrigins.includes(origin)) {
+        callback(null, true);
+        return;
+      }
+
+      callback(null, false);
+    }
   })
 );
 app.use(express.json());

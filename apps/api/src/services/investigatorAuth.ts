@@ -1,6 +1,6 @@
 import type { NextFunction, Request, Response } from "express";
 import { createRemoteJWKSet, jwtVerify } from "jose";
-import type { AppConfig } from "../config/appConfig";
+import type { AppConfig } from "../config/appConfig.js";
 
 function readStringArray(value: unknown): string[] {
   if (Array.isArray(value)) {
