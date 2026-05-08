@@ -23,15 +23,17 @@ import {
 const currentFilePath = fileURLToPath(import.meta.url);
 const currentDirectory = path.dirname(currentFilePath);
 
-const rootEnvPath = path.resolve(currentDirectory, "../../../.env");
-const localEnvPath = path.resolve(currentDirectory, "../.env");
+const envCandidates = [
+  path.resolve(currentDirectory, "../.env"),
+  path.resolve(currentDirectory, "../../../.env"),
+  path.resolve(currentDirectory, "../../../../.env"),
+  path.resolve(currentDirectory, "../../../../../../.env")
+];
 
-if (fs.existsSync(rootEnvPath)) {
-  loadEnv({ path: rootEnvPath });
-}
-
-if (fs.existsSync(localEnvPath)) {
-  loadEnv({ path: localEnvPath, override: true });
+for (const envPath of envCandidates) {
+  if (fs.existsSync(envPath)) {
+    loadEnv({ path: envPath, override: true });
+  }
 }
 
 const app = express();
