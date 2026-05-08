@@ -1,10 +1,22 @@
-name: Deploy Investigator Portal to cPanel
+name: Deploy API to cPanel
 
 on:
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/deploy-api-cpanel.yml"
+      - "apps/api/**"
+      - "packages/types/**"
+      - "packages/utils/**"
+      - "package.json"
+      - "pnpm-lock.yaml"
+      - "pnpm-workspace.yaml"
+      - "tsconfig.base.json"
   workflow_dispatch:
 
 concurrency:
-  group: cpanel-investigator-deploy
+  group: cpanel-api-deploy
   cancel-in-progress: true
 
 jobs:
@@ -29,15 +41,18 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Build investigator portal
-        env:
-          VITE_API_BASE_URL: ${{ secrets.INVESTIGATOR_VITE_API_BASE_URL }}
-          VITE_INVESTIGATOR_ENTRA_TENANT_ID: ${{ secrets.INVESTIGATOR_VITE_INVESTIGATOR_ENTRA_TENANT_ID }}
-          VITE_INVESTIGATOR_ENTRA_CLIENT_ID: ${{ secrets.INVESTIGATOR_VITE_INVESTIGATOR_ENTRA_CLIENT_ID }}
-          VITE_INVESTIGATOR_API_SCOPE: ${{ secrets.INVESTIGATOR_VITE_INVESTIGATOR_API_SCOPE }}
-        run: pnpm --filter investigator-portal build
+      - name: Build API
+        run: pnpm --filter api build
 
-      - name: Deploy investigator portal to cPanel
+      - name: Prepare API deployment bundle
+        run: |
+          rm -rf .cpanel-deploy/api
+          mkdir -p .cpanel-deploy/api
+          cp apps/api/app.js .cpanel-deploy/api/
+          cp apps/api/package.json .cpanel-deploy/api/
+          cp -r apps/api/dist .cpanel-deploy/api/dist
+
+      - name: Deploy API to cPanel
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ${{ secrets.CPANEL_FTP_SERVER }}
@@ -48,6 +63,6 @@ jobs:
           security: loose
           timeout: 120000
           log-level: verbose
-          local-dir: ./apps/investigator-portal/dist/
-          server-dir: ${{ secrets.INVESTIGATOR_CPANEL_REMOTE_DIR }}
+          local-dir: ./.cpanel-deploy/api/
+          server-dir: ${{ secrets.API_CPANEL_REMOTE_DIR }}
           dangerous-clean-slate: false

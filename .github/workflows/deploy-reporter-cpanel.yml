@@ -4,6 +4,14 @@ on:
   push:
     branches:
       - main
+    paths:
+      - ".github/workflows/deploy-reporter-cpanel.yml"
+      - "apps/reporter-portal/**"
+      - "packages/types/**"
+      - "package.json"
+      - "pnpm-lock.yaml"
+      - "pnpm-workspace.yaml"
+      - "tsconfig.base.json"
   workflow_dispatch:
 
 concurrency:

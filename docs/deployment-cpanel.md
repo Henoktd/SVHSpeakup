@@ -1,45 +1,90 @@
 # Deploying SVH SpeakUp to cPanel
 
-This repo is prepared for a cPanel hosting shape that mirrors the successful PAES setup, while accounting for the extra Node API in this project.
+This rollout is prepared for phase one only:
 
-## Recommended Production URLs
-
-- `https://www.sol-ventures.com` for the main corporate website
 - `https://speak.sol-ventures.com` for the public reporter portal
-- `https://ops.sol-ventures.com` for the investigator portal
 - `https://api.speak.sol-ventures.com` for the backend API
+- the investigator portal stays out of production for now
 
-This keeps the public-facing reporting flow separate from the investigator workspace, and avoids overloading the main website.
+## Deployment model
 
-## Recommended cPanel Shape
+- GitHub is the source of truth
+- GitHub Actions builds and deploys the reporter portal and API to cPanel over FTPS
+- cPanel Application Manager runs the Node.js API
 
-### Static frontends
+This is simpler and safer than trying to build the monorepo directly on shared hosting.
 
-- `speak.sol-ventures.com` should point to its own document root
-- `ops.sol-ventures.com` should point to its own document root
-- each frontend deploys only built Vite assets
-- both frontends already include `public/.htaccess` for SPA routing on cPanel
-
-### Node API
-
-- `api.speak.sol-ventures.com` should be created as a separate subdomain or app endpoint
-- the API should be hosted as a Node.js application in cPanel Application Manager
-- file manager alone is enough for uploading files, but it is not enough by itself to run the API unless your cPanel account also includes the Node.js app feature
-
-## Frontend GitHub Actions Workflows
-
-This repo now includes:
+## Workflows in this repo
 
 - `.github/workflows/deploy-reporter-cpanel.yml`
+- `.github/workflows/deploy-api-cpanel.yml`
 - `.github/workflows/deploy-investigator-cpanel.yml`
 
-They follow the same model as PAES:
+The investigator workflow is manual-only until phase two.
 
-1. install dependencies
-2. build the specific Vite app
-3. upload only the built `dist/` folder to the cPanel document root through FTPS
+## Step 1: Prepare cPanel
 
-## GitHub Secrets
+### 1. Verify the two live domains
+
+In cPanel `Domains`, confirm these exist and keep their current roots:
+
+- `speak.sol-ventures.com` -> `/speak.sol-ventures.com`
+- `api.speak.sol-ventures.com` -> `/api.speak.sol-ventures.com`
+
+Do not add redirects between them.
+
+### 2. Fix SSL before enabling HTTPS redirect
+
+The warning icon beside `Force HTTPS Redirect` usually means SSL is not active yet.
+
+In cPanel `SSL/TLS Status`:
+
+1. make sure both domains are included in AutoSSL
+2. run AutoSSL
+3. wait until both domains show an active certificate
+
+After SSL is active, go back to `Domains` and enable `Force HTTPS Redirect` for:
+
+- `speak.sol-ventures.com`
+- `api.speak.sol-ventures.com`
+
+### 3. Confirm Node.js support
+
+You need cPanel `Application Manager` for the API. If your cPanel account does not show it, ask the hosting provider to enable:
+
+- Node.js application support
+- Application Manager
+- Terminal or SSH access if available
+
+### 4. Create the API application in cPanel
+
+In `Application Manager`, create a Node.js app with:
+
+- Domain: `api.speak.sol-ventures.com`
+- Application root: `api.speak.sol-ventures.com`
+- Application URL: `/`
+- Startup file: `app.js`
+- Node.js version: `20` or `22`
+
+Use the same folder as the subdomain root to avoid Passenger and SSL path mismatches.
+
+### 5. Create or choose FTP access
+
+You can use:
+
+- the main cPanel FTP user, or
+- dedicated FTP users scoped to each deployment folder
+
+If you use the main cPanel user, these remote directories usually work:
+
+- reporter portal: `/speak.sol-ventures.com/`
+- API app: `/api.speak.sol-ventures.com/`
+
+If you create FTP users scoped directly to those folders, use `/` for the corresponding workflow secret.
+
+## Step 2: Add GitHub secrets
+
+In GitHub `Settings -> Secrets and variables -> Actions`, add:
 
 ### Shared cPanel FTPS secrets
 
@@ -48,95 +93,33 @@ They follow the same model as PAES:
 - `CPANEL_FTP_PASSWORD`
 - `CPANEL_FTP_PORT`
 
+Recommended port:
+
+- `21`
+
 ### Reporter portal secrets
 
 - `REPORTER_VITE_API_BASE_URL`
 - `REPORTER_CPANEL_REMOTE_DIR`
 
-Recommended values:
+Recommended values for this rollout:
 
 - `REPORTER_VITE_API_BASE_URL=https://api.speak.sol-ventures.com`
-- `REPORTER_CPANEL_REMOTE_DIR=/public_html/speak/`
+- `REPORTER_CPANEL_REMOTE_DIR=/speak.sol-ventures.com/`
 
-If your FTP account is already scoped directly to the reporter subdomain root, use:
+### API secrets
 
-- `REPORTER_CPANEL_REMOTE_DIR=/`
+- `API_CPANEL_REMOTE_DIR`
 
-### Investigator portal secrets
+Recommended value:
 
-- `INVESTIGATOR_VITE_API_BASE_URL`
-- `INVESTIGATOR_VITE_INVESTIGATOR_ENTRA_TENANT_ID`
-- `INVESTIGATOR_VITE_INVESTIGATOR_ENTRA_CLIENT_ID`
-- `INVESTIGATOR_VITE_INVESTIGATOR_API_SCOPE`
-- `INVESTIGATOR_CPANEL_REMOTE_DIR`
+- `API_CPANEL_REMOTE_DIR=/api.speak.sol-ventures.com/`
 
-Recommended values:
+## Step 3: Configure API environment variables in cPanel
 
-- `INVESTIGATOR_VITE_API_BASE_URL=https://api.speak.sol-ventures.com`
-- `INVESTIGATOR_CPANEL_REMOTE_DIR=/public_html/ops/`
+In `Application Manager`, add the production environment values for the API.
 
-If your FTP account is already scoped directly to the investigator subdomain root, use:
-
-- `INVESTIGATOR_CPANEL_REMOTE_DIR=/`
-
-## Reporter Portal DNS and Hosting
-
-1. Create subdomain `speak.sol-ventures.com`
-2. Assign a dedicated document root
-   Example:
-   - `public_html/speak/`
-3. Enable SSL
-4. Let GitHub Actions deploy `apps/reporter-portal/dist/`
-
-## Investigator Portal DNS and Hosting
-
-1. Create subdomain `ops.sol-ventures.com`
-2. Assign a dedicated document root
-   Example:
-   - `public_html/ops/`
-3. Enable SSL
-4. Let GitHub Actions deploy `apps/investigator-portal/dist/`
-
-## Investigator Entra Production Settings
-
-Add this production redirect URI to the investigator portal app registration:
-
-- `https://ops.sol-ventures.com`
-
-Make sure the existing API scope remains granted:
-
-- `api://5e2890bd-62b5-4492-a93a-cce9c44277f7/investigator.read`
-
-## API Hosting in cPanel
-
-The API is prepared to run as a standard Node.js app from:
-
-- `apps/api/app.js`
-
-### Files to upload for the API app
-
-Upload the contents of `apps/api/` to the application directory you will use in cPanel, including:
-
-- `app.js`
-- `dist/`
-- `package.json`
-- `.env` if you want app-local environment loading
-
-Do not upload `node_modules/`.
-
-### API runtime setup
-
-1. Create the Node.js application in cPanel Application Manager
-2. Set the application root to the uploaded API folder
-3. Set the startup file to:
-   - `app.js`
-4. Run:
-   - `npm install --omit=dev`
-5. Restart the application
-
-### API environment variables
-
-At minimum, configure:
+### Minimum required for phase one
 
 - `DATAVERSE_MODE=live`
 - `DATAVERSE_URL`
@@ -148,11 +131,12 @@ At minimum, configure:
 - `DATAVERSE_AUDIT_ENTITY_SET`
 - all required `DATAVERSE_*_FIELD` mappings
 - `REPORTER_PORTAL_URL=https://speak.sol-ventures.com`
-- `INVESTIGATOR_PORTAL_URL=https://ops.sol-ventures.com`
-- `CORS_ALLOWED_ORIGINS=https://speak.sol-ventures.com,https://ops.sol-ventures.com`
+- `INVESTIGATOR_AUTH_ENABLED=false`
 
-For email:
+### Optional but recommended
 
+- `DATAVERSE_CATEGORY_OPTION_MAP`
+- `DATAVERSE_STATUS_OPTION_MAP`
 - `SMTP_HOST`
 - `SMTP_PORT`
 - `SMTP_SECURE`
@@ -160,16 +144,52 @@ For email:
 - `SMTP_PASSWORD`
 - `SMTP_FROM`
 
-For investigator access:
+You only need `CORS_ALLOWED_ORIGINS` if you want extra origins beyond the reporter portal URL.
 
-- `INVESTIGATOR_AUTH_ENABLED=true`
-- `INVESTIGATOR_ENTRA_TENANT_ID=3427e2ad-ba6d-4100-aec4-f3f18e4b32d1`
-- `INVESTIGATOR_API_AUDIENCES=5e2890bd-62b5-4492-a93a-cce9c44277f7,api://5e2890bd-62b5-4492-a93a-cce9c44277f7`
-- `INVESTIGATOR_ALLOWED_GROUP_IDS=48163035-5ff8-4b19-b924-bd769f14dade`
+## Step 4: First deployment order
 
-## Important Notes
+### 1. Deploy the API first
 
-- The frontends are static deployments, just like PAES
-- The API is not static and should not be uploaded into `public_html` as if it were a website
-- If a portal route returns `404` on refresh, the most common issue is the subdomain document root or `.htaccess`
-- If the API works from Postman but fails in-browser, the most common issue is missing production CORS origins
+Run the `Deploy API to cPanel` GitHub Actions workflow.
+
+That workflow uploads:
+
+- `app.js`
+- `package.json`
+- `dist/`
+
+After the upload finishes, in cPanel:
+
+1. open `Application Manager`
+2. click `Enable Dependencies` or run `npm install --omit=dev`
+3. restart the application
+
+### 2. Test the API
+
+Check:
+
+- `https://api.speak.sol-ventures.com/health`
+
+Expected result:
+
+- JSON with `"ok": true`
+
+### 3. Deploy the reporter portal
+
+Run the `Deploy Reporter Portal to cPanel` workflow.
+
+That workflow uploads only the built Vite `dist/` contents to the reporter portal document root.
+
+### 4. Test the reporter portal
+
+Check:
+
+- `https://speak.sol-ventures.com`
+- `https://speak.sol-ventures.com/report`
+- `https://speak.sol-ventures.com/track`
+
+If a direct refresh on `/report` or `/track` returns `404`, the usual cause is a missing `.htaccess` file or the wrong subdomain root.
+
+## Phase two later
+
+When you are ready for the investigator portal, set up its domain, Entra redirect URI, secrets, and then enable the manual investigator workflow.
