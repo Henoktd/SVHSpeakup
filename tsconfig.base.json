@@ -12,9 +12,13 @@
     "allowSyntheticDefaultImports": true,
     "baseUrl": ".",
     "paths": {
+      "@svh/ui": ["packages/ui/src/index.ts"],
       "@svh/ui/*": ["packages/ui/src/*"],
+      "@svh/types": ["packages/types/src/index.ts"],
       "@svh/types/*": ["packages/types/src/*"],
+      "@svh/config": ["packages/config/src/index.ts"],
       "@svh/config/*": ["packages/config/src/*"],
+      "@svh/utils": ["packages/utils/src/index.ts"],
       "@svh/utils/*": ["packages/utils/src/*"]
     }
   }

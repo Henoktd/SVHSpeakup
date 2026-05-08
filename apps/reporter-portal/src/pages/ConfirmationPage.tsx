@@ -8,6 +8,7 @@ export function ConfirmationPage() {
   const result = location.state as CreateReportResponse | null;
   const [email, setEmail] = useState("");
   const [emailSaved, setEmailSaved] = useState(false);
+  const [emailSent, setEmailSent] = useState(false);
   const [emailError, setEmailError] = useState<string | null>(null);
   const [isSavingEmail, setIsSavingEmail] = useState(false);
 
@@ -20,11 +21,13 @@ export function ConfirmationPage() {
     setIsSavingEmail(true);
 
     try {
-      await saveReporterEmail({
+      const saveResult = await saveReporterEmail({
         caseId: result.caseId,
+        secret: result.secret,
         reporterEmail: email
       });
       setEmailSaved(true);
+      setEmailSent(saveResult.emailed);
     } catch (error) {
       setEmailError(
         error instanceof Error ? error.message : "Unable to save email."
@@ -82,6 +85,13 @@ export function ConfirmationPage() {
                   {emailSaved ? "Saved" : isSavingEmail ? "Saving..." : "Save"}
                 </button>
               </div>
+              {emailSaved ? (
+                <p className="support-copy">
+                  {emailSent
+                    ? "Your case details were emailed to this address."
+                    : "Your email was saved, but SMTP delivery is not configured yet."}
+                </p>
+              ) : null}
               {emailError ? <p className="field-error">{emailError}</p> : null}
             </div>
           </>
@@ -94,6 +104,15 @@ export function ConfirmationPage() {
         )}
 
         <div className="actions">
+          {result ? (
+            <Link
+              className="button secondary"
+              state={{ caseId: result.caseId, secret: result.secret }}
+              to="/track"
+            >
+              Track this case
+            </Link>
+          ) : null}
           <Link className="button primary" to="/report">
             Submit another report
           </Link>

@@ -1,7 +1,11 @@
 import type {
+  ReporterAccessRequest,
+  ReporterCaseAccessResponse,
   CreateReportRequest,
   CreateReportResponse,
-  SaveReporterEmailRequest
+  ReporterFormOptionsResponse,
+  SaveReporterEmailRequest,
+  SaveReporterEmailResponse
 } from "@svh/types";
 
 const API_BASE_URL =
@@ -26,9 +30,20 @@ export async function createReport(
   return response.json() as Promise<CreateReportResponse>;
 }
 
+export async function getReporterFormOptions(): Promise<ReporterFormOptionsResponse> {
+  const response = await fetch(`${API_BASE_URL}/api/reports/options`);
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(errorText || "Unable to load report form options.");
+  }
+
+  return response.json() as Promise<ReporterFormOptionsResponse>;
+}
+
 export async function saveReporterEmail(
   payload: SaveReporterEmailRequest
-): Promise<void> {
+): Promise<SaveReporterEmailResponse> {
   const response = await fetch(`${API_BASE_URL}/api/reports/email`, {
     method: "POST",
     headers: {
@@ -41,4 +56,25 @@ export async function saveReporterEmail(
     const errorText = await response.text();
     throw new Error(errorText || "Unable to save email.");
   }
+
+  return response.json() as Promise<SaveReporterEmailResponse>;
+}
+
+export async function accessReporterCase(
+  payload: ReporterAccessRequest
+): Promise<ReporterCaseAccessResponse> {
+  const response = await fetch(`${API_BASE_URL}/api/reports/access`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(payload)
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(errorText || "Unable to load case.");
+  }
+
+  return response.json() as Promise<ReporterCaseAccessResponse>;
 }

@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Compliance Admin Dashboard | SECURE REPORT</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-secondary": "#ffffff",
+                      "outline": "#76777d",
+                      "on-primary": "#ffffff",
+                      "on-primary-fixed-variant": "#3f465c",
+                      "surface-container-high": "#e6e8ea",
+                      "outline-variant": "#c6c6cd",
+                      "surface-variant": "#e0e3e5",
+                      "surface": "#f7f9fb",
+                      "on-surface": "#191c1e",
+                      "error-container": "#ffdad6",
+                      "on-primary-fixed": "#131b2e",
+                      "on-tertiary-fixed": "#00174b",
+                      "secondary-fixed-dim": "#b9c7e0",
+                      "surface-tint": "#565e74",
+                      "surface-dim": "#d8dadc",
+                      "on-tertiary-fixed-variant": "#003ea8",
+                      "on-secondary-fixed-variant": "#3a485c",
+                      "on-secondary-container": "#57657b",
+                      "primary": "#000000",
+                      "on-error-container": "#93000a",
+                      "primary-fixed-dim": "#bec6e0",
+                      "tertiary-fixed": "#dbe1ff",
+                      "inverse-surface": "#2d3133",
+                      "on-primary-container": "#7c839b",
+                      "secondary-container": "#d5e3fd",
+                      "on-background": "#191c1e",
+                      "secondary": "#515f74",
+                      "tertiary-container": "#00174b",
+                      "on-tertiary": "#ffffff",
+                      "error": "#ba1a1a",
+                      "tertiary-fixed-dim": "#b4c5ff",
+                      "on-error": "#ffffff",
+                      "surface-container-low": "#f2f4f6",
+                      "surface-bright": "#f7f9fb",
+                      "on-secondary-fixed": "#0d1c2f",
+                      "surface-container-highest": "#e0e3e5",
+                      "inverse-on-surface": "#eff1f3",
+                      "on-surface-variant": "#45464d",
+                      "primary-fixed": "#dae2fd",
+                      "secondary-fixed": "#d5e3fd",
+                      "surface-container": "#eceef0",
+                      "surface-container-lowest": "#ffffff",
+                      "background": "#f7f9fb",
+                      "on-tertiary-container": "#497cff",
+                      "tertiary": "#000000",
+                      "inverse-primary": "#bec6e0",
+                      "primary-container": "#131b2e"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "gutter": "24px",
+                      "container-max": "1024px",
+                      "stack-lg": "48px",
+                      "stack-md": "24px",
+                      "stack-sm": "12px",
+                      "base": "8px",
+                      "margin": "32px"
+              },
+              "fontFamily": {
+                      "headline-sm": ["Public Sans"],
+                      "body-lg": ["Public Sans"],
+                      "body-sm": ["Public Sans"],
+                      "body-md": ["Public Sans"],
+                      "headline-lg": ["Public Sans"],
+                      "label-md": ["Public Sans"],
+                      "label-sm": ["Public Sans"],
+                      "headline-md": ["Public Sans"]
+              },
+              "fontSize": {
+                      "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                      "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "headline-lg": ["30px", {"lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "label-md": ["14px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                      "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                      "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+        body { font-family: 'Public Sans', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-surface text-on-surface selection:bg-secondary-container selection:text-on-secondary-container">
+<div class="flex h-screen overflow-hidden">
+<!-- NavigationDrawer -->
+<aside class="hidden md:flex flex-col h-full py-margin bg-surface-container-low border-r border-outline-variant w-64 rounded-r-xl">
+<div class="px-gutter mb-stack-lg">
+<span class="font-headline-md text-headline-md font-bold text-primary">SECURE REPORT</span>
+</div>
+<div class="px-4 mb-stack-md flex items-center gap-stack-sm">
+<div class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container overflow-hidden">
+<img alt="Admin Profile" class="w-full h-full object-cover" data-alt="A professional portrait of a senior compliance officer with silvering hair, wearing a navy blue tailored suit. The lighting is crisp and studio-quality, emphasizing authority and trustworthiness. The background is a blurred office environment with cool tones of slate blue and soft white, maintaining a modern corporate aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB1914y0ebF34zJ0HzqvKwaP18rX-zI9xptgLhtA3UQn87OULiurmsJwrWY9ZJID_7uxXpOnUkqMq4eePTC2C9lVDWs-4LcoEJm1txuNEUuX7QGsHW2mQ1ukCDpWD8Fv_M0G9_eez51O5laxgxnAUbeVPJtkKuIeSsGaQ9mHUMlGk5o7Pt2-JEP6t9_EmNzSpBYdy1RC8EAA76vlRi4aDjSIZu5ZA3vlHcqCuKppH7L5TFzgEeXq3UTWEfxVsh1W4B03-CTF4TX_RaU"/>
+</div>
+<div>
+<p class="font-label-md text-label-md text-on-surface">Compliance Officer</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Level 4 Security</p>
+</div>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="bg-secondary-container text-on-secondary-container font-bold rounded-full mx-2 px-4 py-3 flex items-center gap-3 translate-x-1 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+<a class="text-on-surface-variant mx-2 px-4 py-3 flex items-center gap-3 hover:bg-surface-container-highest transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="folder_shared">folder_shared</span>
+<span class="font-label-md text-label-md">All Cases</span>
+</a>
+<a class="text-on-surface-variant mx-2 px-4 py-3 flex items-center gap-3 hover:bg-surface-container-highest transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="gavel">gavel</span>
+<span class="font-label-md text-label-md">Compliance</span>
+</a>
+<a class="text-on-surface-variant mx-2 px-4 py-3 flex items-center gap-3 hover:bg-surface-container-highest transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="trending_up">trending_up</span>
+<span class="font-label-md text-label-md">Analytics</span>
+</a>
+</nav>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col overflow-hidden">
+<!-- TopAppBar -->
+<header class="bg-surface border-b border-outline-variant h-16 flex justify-between items-center px-gutter w-full max-w-container-max mx-auto shrink-0 z-10">
+<div class="flex items-center gap-stack-sm">
+<span class="material-symbols-outlined text-primary" data-icon="shield">shield</span>
+<h1 class="font-headline-sm text-headline-sm text-primary tracking-tight">SECURE REPORT</h1>
+</div>
+<div class="flex items-center gap-4">
+<div class="hidden sm:flex items-center bg-surface-container h-10 px-4 rounded-full border border-outline-variant">
+<span class="material-symbols-outlined text-on-surface-variant text-[20px] mr-2" data-icon="search">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-label-md font-label-md w-64 placeholder:text-outline" placeholder="Search case ID, officer, or type..." type="text"/>
+</div>
+<button class="material-symbols-outlined text-primary hover:bg-surface-container-high transition-colors p-2 rounded-full" data-icon="lock">lock</button>
+</div>
+</header>
+<!-- Canvas -->
+<section class="flex-1 overflow-y-auto p-gutter max-w-container-max mx-auto w-full">
+<!-- Bento Grid Summary -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-stack-md mb-stack-lg">
+<!-- Trend Card -->
+<div class="md:col-span-2 bg-surface-container-lowest border border-outline-variant p-stack-md rounded-xl">
+<div class="flex justify-between items-center mb-stack-sm">
+<h3 class="font-label-md text-label-md text-on-surface-variant">REPORTING TRENDS</h3>
+<span class="material-symbols-outlined text-on-tertiary-container" data-icon="insights">insights</span>
+</div>
+<div class="flex items-end gap-2 h-32 pt-4">
+<div class="flex-1 bg-primary h-[40%] rounded-t-sm" title="Financial"></div>
+<div class="flex-1 bg-secondary h-[65%] rounded-t-sm" title="HR/Conduct"></div>
+<div class="flex-1 bg-primary h-[90%] rounded-t-sm" title="Safety"></div>
+<div class="flex-1 bg-secondary h-[30%] rounded-t-sm" title="Security"></div>
+<div class="flex-1 bg-primary h-[55%] rounded-t-sm" title="Environmental"></div>
+<div class="flex-1 bg-secondary h-[45%] rounded-t-sm" title="Other"></div>
+</div>
+<div class="flex justify-between mt-2 font-label-sm text-label-sm text-outline">
+<span>MON</span><span>TUE</span><span>WED</span><span>THU</span><span>FRI</span><span>SAT</span>
+</div>
+</div>
+<!-- Key Metrics -->
+<div class="bg-surface-container-lowest border border-outline-variant p-stack-md rounded-xl flex flex-col justify-between">
+<p class="font-label-md text-label-md text-on-surface-variant">OPEN CASES</p>
+<p class="font-headline-lg text-headline-lg text-primary">124</p>
+<div class="flex items-center gap-1 text-error">
+<span class="material-symbols-outlined text-[16px]" data-icon="arrow_upward">arrow_upward</span>
+<span class="font-label-sm text-label-sm">+12% vs last week</span>
+</div>
+</div>
+<div class="bg-primary-container text-on-primary-container border border-primary p-stack-md rounded-xl flex flex-col justify-between">
+<p class="font-label-md text-label-md opacity-80">AVG. RESPONSE</p>
+<p class="font-headline-lg text-headline-lg">1.4h</p>
+<div class="flex items-center gap-1 text-on-tertiary-container">
+<span class="material-symbols-outlined text-[16px]" data-icon="check_circle">check_circle</span>
+<span class="font-label-sm text-label-sm">Within SLA Target</span>
+</div>
+</div><div class="bg-surface-container-lowest border border-outline-variant p-stack-md rounded-xl flex flex-col justify-between">
+<div class="flex justify-between items-start">
+<p class="font-label-md text-label-md text-on-surface-variant uppercase">Dataverse Integration</p>
+<span class="material-symbols-outlined text-primary text-[20px]" data-icon="sync">sync</span>
+</div>
+<div>
+<p class="font-headline-sm text-headline-sm text-primary">4,281 Records</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant flex items-center gap-1 mt-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="schedule">schedule</span>
+      Sync: 12m ago
+    </p>
+</div>
+<div class="mt-2 py-1 px-2 bg-secondary-container text-on-secondary-container rounded text-[10px] font-bold w-fit uppercase tracking-wider">
+    Live Stream Active
+  </div>
+</div>
+</div>
+<!-- Case Management Table -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden mb-stack-lg">
+<div class="p-stack-md border-b border-outline-variant flex flex-wrap items-center justify-between gap-4">
+<h2 class="font-headline-sm text-headline-sm text-primary">Active Cases</h2>
+<div class="flex gap-2">
+<button class="px-4 py-2 bg-surface-container-high text-on-surface font-label-md text-label-md rounded border border-outline-variant flex items-center gap-2 hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined text-[18px]" data-icon="filter_list">filter_list</span> Filter
+                            </button>
+<button class="px-4 py-2 bg-primary text-on-primary font-label-md text-label-md rounded flex items-center gap-2 hover:opacity-80 transition-opacity"><span class="material-symbols-outlined text-[18px]" data-icon="ios_share">ios_share</span> Export to Excel/Power BI</button>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container text-on-surface-variant font-label-md text-label-md uppercase tracking-wider">
+<th class="px-gutter py-4 font-label-md">Case ID</th>
+<th class="px-gutter py-4 font-label-md">Subject</th>
+<th class="px-gutter py-4 font-label-md">Priority</th>
+<th class="px-gutter py-4 font-label-md">Status</th>
+<th class="px-gutter py-4 font-label-md">Submitted</th>
+<th class="px-gutter py-4 font-label-md">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant">
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="px-gutter py-4 font-body-sm text-primary font-bold">#CAS-9082</td>
+<td class="px-gutter py-4 font-body-md text-on-surface">Unreported safety breach in Sector 4</td>
+<td class="px-gutter py-4">
+<span class="inline-flex items-center px-2 py-1 rounded bg-error-container text-on-error-container font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[14px] mr-1" data-icon="priority_high">priority_high</span> High
+                                        </span>
+</td>
+<td class="px-gutter py-4">
+<span class="inline-flex items-center px-2 py-1 rounded bg-secondary-container text-on-secondary-container font-label-sm text-label-sm">
+                                            Under Review
+                                        </span>
+</td>
+<td class="px-gutter py-4 font-body-sm text-on-surface-variant">Oct 24, 2023</td>
+<td class="px-gutter py-4">
+<button class="text-on-tertiary-container font-label-md text-label-md hover:underline">View Details</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="px-gutter py-4 font-body-sm text-primary font-bold">#CAS-9077</td>
+<td class="px-gutter py-4 font-body-md text-on-surface">Compliance deviation: Financial records</td>
+<td class="px-gutter py-4">
+<span class="inline-flex items-center px-2 py-1 rounded bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm">
+                                            Medium
+                                        </span>
+</td>
+<td class="px-gutter py-4">
+<span class="inline-flex items-center px-2 py-1 rounded bg-tertiary-container text-on-tertiary-container font-label-sm text-label-sm">
+                                            New
+                                        </span>
+</td>
+<td class="px-gutter py-4 font-body-sm text-on-surface-variant">Oct 23, 2023</td>
+<td class="px-gutter py-4">
+<button class="text-on-tertiary-container font-label-md text-label-md hover:underline">View Details</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="px-gutter py-4 font-body-sm text-primary font-bold">#CAS-9071</td>
+<td class="px-gutter py-4 font-body-md text-on-surface">Employee conduct grievance</td>
+<td class="px-gutter py-4">
+<span class="inline-flex items-center px-2 py-1 rounded bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm">
+                                            Low
+                                        </span>
+</td>
+<td class="px-gutter py-4">
+<span class="inline-flex items-center px-2 py-1 rounded border border-outline text-outline font-label-sm text-label-sm">
+                                            Resolved
+                                        </span>
+</td>
+<td class="px-gutter py-4 font-body-sm text-on-surface-variant">Oct 21, 2023</td>
+<td class="px-gutter py-4">
+<button class="text-on-tertiary-container font-label-md text-label-md hover:underline">View Details</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Footer / Status Tracker -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-stack-md text-on-surface-variant">
+<div class="bg-surface-container border border-outline-variant p-stack-md rounded-xl flex items-center gap-4">
+<span class="material-symbols-outlined text-primary text-[32px]" data-icon="lock" data-weight="fill" style="font-variation-settings: 'FILL' 1;">lock</span>
+<div>
+<p class="font-label-md text-label-md text-primary">ENCRYPTED DATABASE</p>
+<p class="font-body-sm text-body-sm">All case data is secured with AES-256 end-to-end encryption. Your session is monitored for security compliance.</p>
+</div>
+</div>
+<div class="bg-surface-container border border-outline-variant p-stack-md rounded-xl flex items-center gap-4">
+<span class="material-symbols-outlined text-primary text-[32px]" data-icon="verified_user">verified_user</span>
+<div>
+<p class="font-label-md text-label-md text-primary">COMPLIANCE CERTIFIED</p>
+<p class="font-body-sm text-body-sm">This dashboard meets SOC2 Type II and GDPR standards for sensitive information handling.</p>
+</div>
+</div>
+</div>
+</section>
+</main>
+</div>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-2 bg-surface border-t border-outline-variant">
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-xl px-4 py-1 scale-95 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="add_moderator">add_moderator</span>
+<span class="font-label-sm text-label-sm">Report</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="manage_search">manage_search</span>
+<span class="font-label-sm text-label-sm">Track</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="policy">policy</span>
+<span class="font-label-sm text-label-sm">Policy</span>
+</a>
+</nav>
+</body></html>

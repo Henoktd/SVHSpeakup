@@ -1,10 +1,12 @@
+@import url("https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700;800&display=swap");
+
 :root {
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  color: #12243d;
+  font-family: "Public Sans", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  color: #13233a;
   background:
-    radial-gradient(circle at top right, rgba(236, 169, 91, 0.18), transparent 25%),
-    radial-gradient(circle at bottom left, rgba(50, 96, 169, 0.12), transparent 30%),
-    linear-gradient(180deg, #ffffff 0%, #f7f8fb 100%);
+    radial-gradient(circle at top right, rgba(61, 103, 164, 0.12), transparent 22%),
+    radial-gradient(circle at bottom left, rgba(15, 117, 168, 0.1), transparent 30%),
+    linear-gradient(180deg, #f8fafc 0%, #f3f6fb 100%);
   line-height: 1.5;
   font-weight: 400;
 }
@@ -182,7 +184,7 @@ textarea {
 }
 
 .button.primary {
-  background: linear-gradient(135deg, #204973 0%, #0f75a8 100%);
+  background: linear-gradient(135deg, #163d69 0%, #0f75a8 100%);
   color: #ffffff;
   box-shadow: 0 12px 24px rgba(15, 117, 168, 0.24);
 }
@@ -298,6 +300,65 @@ textarea {
   border-radius: 28px;
 }
 
+.form-stepper {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.form-step-card {
+  display: flex;
+  align-items: start;
+  gap: 0.85rem;
+  padding: 1rem 1.05rem;
+  border: 1px solid rgba(17, 32, 59, 0.08);
+  border-radius: 22px;
+  background: #f7fafc;
+  color: #5b6c84;
+}
+
+.form-step-card.active {
+  border-color: rgba(15, 117, 168, 0.2);
+  background: linear-gradient(180deg, rgba(236, 244, 255, 0.92), #ffffff);
+  color: #13233a;
+}
+
+.form-step-card.complete {
+  border-color: rgba(22, 61, 105, 0.14);
+}
+
+.form-step-card strong,
+.form-step-card p {
+  margin: 0;
+}
+
+.form-step-card p {
+  margin-top: 0.2rem;
+  font-size: 0.92rem;
+}
+
+.form-step-index {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  background: rgba(17, 32, 59, 0.08);
+  color: #163d69;
+  font-weight: 800;
+}
+
+.form-step-card.active .form-step-index {
+  background: #163d69;
+  color: #ffffff;
+}
+
+.form-step-panel {
+  display: grid;
+  gap: 1rem;
+}
+
 .form-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -336,6 +397,26 @@ textarea {
   background: #f1f8fc;
 }
 
+.form-section {
+  margin-top: 1.75rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(17, 32, 59, 0.08);
+}
+
+.section-head-inline {
+  margin-bottom: 1rem;
+}
+
+.section-head-inline h2 {
+  margin: 0.35rem 0 0;
+  font-size: 1.45rem;
+}
+
+.step-copy {
+  margin: 0.55rem 0 0;
+  color: #52627a;
+}
+
 .checkbox {
   display: flex;
   align-items: start;
@@ -345,6 +426,55 @@ textarea {
 
 .checkbox input {
   margin-top: 0.25rem;
+}
+
+.checkbox-card-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.checkbox-card {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: start;
+  gap: 0.9rem;
+  margin-top: 0;
+  min-height: 88px;
+  padding: 1rem 1.05rem;
+  border: 1px solid rgba(17, 32, 59, 0.1);
+  border-radius: 18px;
+  background: #f7fafc;
+  cursor: pointer;
+  transition:
+    transform 150ms ease,
+    border-color 150ms ease,
+    box-shadow 150ms ease,
+    background 150ms ease;
+}
+
+.checkbox-card:hover {
+  transform: translateY(-1px);
+  border-color: rgba(15, 117, 168, 0.2);
+  box-shadow: 0 12px 24px rgba(17, 32, 59, 0.06);
+}
+
+.checkbox-card.checked {
+  border-color: rgba(15, 117, 168, 0.24);
+  background: linear-gradient(180deg, rgba(236, 244, 255, 0.92), #ffffff);
+  box-shadow: 0 14px 28px rgba(17, 32, 59, 0.08);
+}
+
+.checkbox-card input {
+  margin: 0.15rem 0 0;
+  accent-color: #0f75a8;
+}
+
+.checkbox-card-label {
+  align-self: center;
+  text-align: left;
+  font-weight: 600;
+  color: #183151;
 }
 
 .field-error {
@@ -363,6 +493,24 @@ textarea {
 
 .submit-row {
   margin-top: 1.5rem;
+}
+
+.step-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.step-actions-copy {
+  color: #52627a;
+  font-size: 0.96rem;
+}
+
+.form-section-first {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: 0;
 }
 
 .credential-list {
@@ -418,9 +566,275 @@ textarea {
   background: #ffffff;
 }
 
+.support-copy {
+  margin: 0.75rem 0 0;
+  color: #41536e;
+  font-size: 0.95rem;
+}
+
+.tracker-shell {
+  padding-top: 0.5rem;
+}
+
+.tracker-hero {
+  padding: 1rem 0 1.25rem;
+  text-align: center;
+}
+
+.tracker-access-card,
+.tracker-panel {
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid rgba(17, 32, 59, 0.1);
+  border-radius: 28px;
+  box-shadow: 0 20px 50px rgba(17, 32, 59, 0.08);
+}
+
+.tracker-access-card {
+  padding: 1.5rem;
+}
+
+.tracker-access-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.tracker-access-actions {
+  margin-top: 1rem;
+}
+
+.tracker-layout {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.tracker-panel {
+  padding: 1.5rem;
+}
+
+.tracker-panel-wide {
+  grid-column: span 2;
+}
+
+.tracker-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin-bottom: 0.9rem;
+}
+
+.tracker-badge,
+.tracker-session-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-height: 34px;
+  padding: 0.35rem 0.8rem;
+  border-radius: 999px;
+  background: #17253d;
+  color: #ffffff;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.tracker-badge.muted,
+.tracker-session-tag {
+  background: rgba(23, 37, 61, 0.08);
+  color: #163d69;
+}
+
+.tracker-progress-card {
+  display: grid;
+  gap: 0.9rem;
+  margin-top: 1.25rem;
+}
+
+.tracker-progress-step {
+  display: flex;
+  align-items: start;
+  gap: 0.9rem;
+  padding: 1rem;
+  border: 1px solid rgba(17, 32, 59, 0.08);
+  border-radius: 20px;
+  background: #f7fafc;
+  color: #67758b;
+}
+
+.tracker-progress-step.active {
+  background: linear-gradient(180deg, rgba(236, 244, 255, 0.92), #ffffff);
+  color: #12243d;
+  border-color: rgba(15, 117, 168, 0.2);
+}
+
+.tracker-progress-step p {
+  margin: 0.25rem 0 0;
+  font-size: 0.94rem;
+}
+
+.tracker-progress-index {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  background: rgba(17, 32, 59, 0.08);
+  font-weight: 800;
+}
+
+.tracker-progress-step.active .tracker-progress-index {
+  background: #163d69;
+  color: #ffffff;
+}
+
+.tracker-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin: 1rem 0 1.5rem;
+}
+
+.tracker-summary-grid div,
+.tracker-detail-grid div {
+  padding: 1rem;
+  border-radius: 18px;
+  background: #f6f8fc;
+}
+
+.tracker-summary-grid dt,
+.tracker-detail-grid span {
+  display: block;
+  margin-bottom: 0.35rem;
+  color: #607089;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.tracker-summary-grid dd,
+.tracker-detail-grid strong {
+  margin: 0;
+  font-size: 1rem;
+  color: #13233a;
+}
+
+.tracker-narrative {
+  margin-bottom: 1rem;
+  padding: 1.1rem 1.15rem;
+  border-left: 4px solid #0f75a8;
+  border-radius: 20px;
+  background: #f6f9fd;
+}
+
+.tracker-narrative h3 {
+  margin: 0 0 0.5rem;
+}
+
+.tracker-narrative p {
+  margin: 0;
+}
+
+.tracker-narrative-secondary {
+  margin-top: 1rem;
+}
+
+.tracker-detail-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.tracker-tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin-top: 1rem;
+}
+
+.tracker-panel-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: start;
+}
+
+.tracker-panel-head h2 {
+  margin: 0.35rem 0 0;
+}
+
+.tracker-timeline {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1.25rem;
+}
+
+.tracker-timeline-entry {
+  display: grid;
+  grid-template-columns: 16px minmax(0, 1fr);
+  gap: 1rem;
+}
+
+.tracker-timeline-marker {
+  position: relative;
+  width: 16px;
+}
+
+.tracker-timeline-marker::before {
+  content: "";
+  position: absolute;
+  left: 3px;
+  top: 0;
+  bottom: -1rem;
+  width: 2px;
+  background: rgba(23, 37, 61, 0.12);
+}
+
+.tracker-timeline-marker::after {
+  content: "";
+  position: absolute;
+  top: 0.3rem;
+  left: 0;
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: #0f75a8;
+  box-shadow: 0 0 0 4px rgba(15, 117, 168, 0.12);
+}
+
+.tracker-timeline-body {
+  padding: 1rem 1.1rem;
+  border-radius: 20px;
+  background: #f6f8fc;
+}
+
+.tracker-timeline-body p {
+  margin: 0;
+}
+
+.tracker-timeline-meta {
+  margin-bottom: 0.5rem !important;
+  color: #607089;
+  font-size: 0.86rem;
+  font-weight: 600;
+}
+
+.tracker-note {
+  margin: 1rem 0 0;
+  color: #55657e;
+}
+
 @media (max-width: 800px) {
   .simple-info-grid,
-  .form-grid {
+  .form-stepper,
+  .form-grid,
+  .checkbox-card-grid,
+  .tracker-access-grid,
+  .tracker-layout,
+  .tracker-summary-grid,
+  .tracker-detail-grid {
     grid-template-columns: 1fr;
   }
 
@@ -454,6 +868,19 @@ textarea {
   }
 
   .email-capture-row {
+    flex-direction: column;
+  }
+
+  .step-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .tracker-panel-wide {
+    grid-column: span 1;
+  }
+
+  .tracker-panel-head {
     flex-direction: column;
   }
 }

@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Secure Report | Whistleblower Platform</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        body {
+            font-family: 'Public Sans', sans-serif;
+            background-color: #f7f9fb;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-secondary": "#ffffff",
+                      "outline": "#76777d",
+                      "on-primary": "#ffffff",
+                      "on-primary-fixed-variant": "#3f465c",
+                      "surface-container-high": "#e6e8ea",
+                      "outline-variant": "#c6c6cd",
+                      "surface-variant": "#e0e3e5",
+                      "surface": "#f7f9fb",
+                      "on-surface": "#191c1e",
+                      "error-container": "#ffdad6",
+                      "on-primary-fixed": "#131b2e",
+                      "on-tertiary-fixed": "#00174b",
+                      "secondary-fixed-dim": "#b9c7e0",
+                      "surface-tint": "#565e74",
+                      "surface-dim": "#d8dadc",
+                      "on-tertiary-fixed-variant": "#003ea8",
+                      "on-secondary-fixed-variant": "#3a485c",
+                      "on-secondary-container": "#57657b",
+                      "primary": "#000000",
+                      "on-error-container": "#93000a",
+                      "primary-fixed-dim": "#bec6e0",
+                      "tertiary-fixed": "#dbe1ff",
+                      "inverse-surface": "#2d3133",
+                      "on-primary-container": "#7c839b",
+                      "secondary-container": "#d5e3fd",
+                      "on-background": "#191c1e",
+                      "secondary": "#515f74",
+                      "tertiary-container": "#00174b",
+                      "on-tertiary": "#ffffff",
+                      "error": "#ba1a1a",
+                      "tertiary-fixed-dim": "#b4c5ff",
+                      "on-error": "#ffffff",
+                      "surface-container-low": "#f2f4f6",
+                      "surface-bright": "#f7f9fb",
+                      "on-secondary-fixed": "#0d1c2f",
+                      "surface-container-highest": "#e0e3e5",
+                      "inverse-on-surface": "#eff1f3",
+                      "on-surface-variant": "#45464d",
+                      "primary-fixed": "#dae2fd",
+                      "secondary-fixed": "#d5e3fd",
+                      "surface-container": "#eceef0",
+                      "surface-container-lowest": "#ffffff",
+                      "background": "#f7f9fb",
+                      "on-tertiary-container": "#497cff",
+                      "tertiary": "#000000",
+                      "inverse-primary": "#bec6e0",
+                      "primary-container": "#131b2e"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "gutter": "24px",
+                      "container-max": "1024px",
+                      "stack-lg": "48px",
+                      "stack-md": "24px",
+                      "stack-sm": "12px",
+                      "base": "8px",
+                      "margin": "32px"
+              },
+              "fontFamily": {
+                      "headline-sm": ["Public Sans"],
+                      "body-lg": ["Public Sans"],
+                      "body-md": ["Public Sans"],
+                      "body-sm": ["Public Sans"],
+                      "headline-lg": ["Public Sans"],
+                      "label-md": ["Public Sans"],
+                      "label-sm": ["Public Sans"],
+                      "headline-md": ["Public Sans"]
+              },
+              "fontSize": {
+                      "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                      "headline-lg": ["30px", {"lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "label-md": ["14px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                      "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                      "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-surface text-on-surface min-h-screen flex flex-col">
+<!-- TopAppBar -->
+<header class="bg-surface border-b border-outline-variant docked full-width top-0 z-50">
+<div class="flex justify-between items-center w-full px-gutter h-16 max-w-container-max mx-auto">
+<div class="flex items-center gap-base">
+<span class="material-symbols-outlined text-primary" data-icon="shield">shield</span>
+<h1 class="font-headline-md text-headline-md font-bold text-primary tracking-tight">SECURE REPORT</h1>
+</div>
+<div class="flex items-center gap-stack-sm">
+<span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-widest hidden md:block">Institutional Grade Security</span>
+<span class="material-symbols-outlined text-primary" data-icon="lock" style="font-variation-settings: 'FILL' 1;">lock</span>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-grow w-full max-w-container-max mx-auto px-gutter py-margin">
+<!-- Progress Indicator -->
+<nav aria-label="Progress Tracker" class="mb-stack-lg">
+<div class="flex justify-between items-center mb-stack-sm">
+<span class="font-label-md text-label-md text-primary uppercase">Step 1 of 3: Incident details</span>
+<span class="font-label-md text-label-md text-outline">33% Completed</span>
+</div>
+<div class="w-full h-1 bg-surface-container-high rounded-full overflow-hidden">
+<div class="h-full bg-primary-container w-1/3 transition-all duration-500"></div>
+</div>
+<div class="flex mt-stack-sm gap-stack-md">
+<div class="flex items-center gap-base">
+<div class="w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center font-label-sm text-label-sm">1</div>
+<span class="font-label-sm text-label-sm text-primary">Details</span>
+</div>
+<div class="flex items-center gap-base opacity-40">
+<div class="w-6 h-6 rounded-full border border-outline text-outline flex items-center justify-center font-label-sm text-label-sm">2</div>
+<span class="font-label-sm text-label-sm text-outline">Anonymity</span>
+</div>
+<div class="flex items-center gap-base opacity-40">
+<div class="w-6 h-6 rounded-full border border-outline text-outline flex items-center justify-center font-label-sm text-label-sm">3</div>
+<span class="font-label-sm text-label-sm text-outline">Review</span>
+</div>
+</div>
+</nav>
+<section class="grid grid-cols-1 lg:grid-cols-12 gap-stack-lg">
+<!-- Left Side: Form Content -->
+<div class="lg:col-span-8 space-y-stack-md">
+<div class="bg-surface-container-lowest border border-outline-variant p-margin shadow-sm rounded-lg">
+<h2 class="font-headline-sm text-headline-sm text-on-surface mb-stack-md">1. Incident Details</h2>
+<form class="space-y-stack-md">
+<!-- Category Select -->
+<div>
+<label class="block font-label-md text-label-md text-on-surface-variant mb-base" for="category">Incident Category</label>
+<select class="w-full bg-surface border border-outline-variant rounded-lg px-4 py-3 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all font-body-md text-body-md" id="category">
+<option disabled="" selected="" value="">Select a category...</option>
+<option value="financial">Financial Misconduct</option>
+<option value="harassment">Workplace Harassment</option>
+<option value="safety">Safety Violation</option>
+<option value="data">Data Privacy Breach</option>
+<option value="other">Other Violation</option>
+</select>
+</div>
+<!-- Date Input -->
+<div>
+<label class="block font-label-md text-label-md text-on-surface-variant mb-base" for="date">Date of Incident</label>
+<div class="relative">
+<input class="w-full bg-surface border border-outline-variant rounded-lg px-4 py-3 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all font-body-md text-body-md" id="date" type="date"/>
+</div>
+</div>
+<!-- Description Textarea -->
+<div>
+<label class="block font-label-md text-label-md text-on-surface-variant mb-base" for="description">Detailed Description</label>
+<textarea class="w-full bg-surface border border-outline-variant rounded-lg px-4 py-3 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all font-body-md text-body-md resize-none" id="description" placeholder="Provide a factual account of the events. Include names, locations, and specific times if known." rows="6"></textarea>
+<p class="mt-base font-body-sm text-body-sm text-outline">Avoid including personally identifiable information here if you wish to remain anonymous.</p>
+</div>
+</form>
+</div>
+<!-- Step 2 Preview / Section -->
+<div class="bg-surface-container border border-outline-variant p-margin rounded-lg opacity-60">
+<div class="flex items-center gap-base mb-stack-sm">
+<span class="material-symbols-outlined text-outline" data-icon="lock_person">lock_person</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface-variant">2. Anonymity Options</h2>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant">Choose how your identity will be handled during the investigation process.</p>
+</div>
+<!-- Step 3 Preview / Section -->
+<div class="bg-surface-container border border-outline-variant p-margin rounded-lg opacity-60">
+<div class="flex items-center gap-base mb-stack-sm">
+<span class="material-symbols-outlined text-outline" data-icon="upload_file">upload_file</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface-variant">3. Evidence &amp; Review</h2>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant">Upload supporting documents and confirm the report for submission.</p>
+</div>
+<!-- Navigation Action Area -->
+<div class="flex justify-between items-center pt-stack-md">
+<button class="flex items-center gap-base px-6 py-3 border border-outline text-on-surface-variant rounded-lg font-label-md text-label-md hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+                        Back
+                    </button>
+<button class="flex items-center gap-base px-12 py-3 bg-primary text-white rounded-lg font-label-md text-label-md hover:opacity-90 transition-all active:scale-95 shadow-md" data-dataverse-schema="incident_reports">
+                        Next Step
+                        <span class="material-symbols-outlined" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Right Side: Psychological Safety & Guidance -->
+<aside class="lg:col-span-4 space-y-stack-md">
+<div class="bg-primary-container text-on-primary-fixed p-stack-md rounded-xl border border-outline-variant">
+<div class="flex items-center gap-base mb-stack-sm text-on-tertiary-container">
+<span class="material-symbols-outlined" data-icon="gavel" style="font-variation-settings: 'FILL' 1;">gavel</span>
+<h3 class="font-label-md text-label-md uppercase tracking-wider">Legal Protection</h3>
+</div>
+<p class="font-body-sm text-body-sm leading-relaxed mb-stack-sm">
+                        Reports submitted through this platform are protected under the <strong>Whistleblower Protection Act</strong>. Your data is encrypted end-to-end.
+                    </p>
+<ul class="space-y-base">
+<li class="flex items-start gap-base font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-on-tertiary-container text-[18px]" data-icon="check_circle">check_circle</span>
+                            Zero-knowledge architecture
+                        </li>
+<li class="flex items-start gap-base font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-on-tertiary-container text-[18px]" data-icon="check_circle">check_circle</span>
+                            Metadata stripping from files
+                        </li>
+</ul>
+</div>
+<div class="bg-surface-container-low border border-outline-variant p-stack-md rounded-xl">
+<h3 class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-stack-sm">Need help?</h3>
+<p class="font-body-sm text-body-sm text-outline mb-stack-md">If you are unsure about the reporting process, you can read our secure FAQ or contact the Ethics Hotline.</p>
+<a class="flex items-center justify-between p-stack-sm bg-surface-container-highest rounded-lg hover:bg-surface-variant transition-colors group" href="#">
+<span class="font-label-sm text-label-sm text-primary">Read Secure Policy</span>
+<span class="material-symbols-outlined text-primary group-hover:translate-x-1 transition-transform" data-icon="chevron_right">chevron_right</span>
+</a>
+</div>
+<div class="rounded-xl overflow-hidden border border-outline-variant grayscale opacity-70">
+<img alt="Cyber Security Detail" class="w-full h-32 object-cover" data-alt="A high-tech digital security visual showing glowing circuit board patterns and data streams in a dark, professional navy blue and white color palette. The image conveys a sense of advanced encryption and absolute data protection within a modern corporate setting. The lighting is crisp and cool-toned, reinforcing a mood of stability and institutional-grade safety." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCOQnSO9bz1hlWHqlBXlLOI8rlBvCgXPW7vi2inI2JGO1o1TsvHLgA4YqvB_odbSKEseQViQuOjiEZE1f6TDpFMKMkX0GUk77XsmShuuGmEu-CXHquTmUpj_b8MDp-G8ZYfv8X4X-HiFM5ijjWfGLFwXE1SQutH-4288Nh_LrAnwg0jy13x6qMmudMwyA8m9jUDyRw-xqYiZ4-CQ9Vje07odawPcXSPMYGzC1x-4ncTyLfb2IkFDWLpuT7NktJMepxtLaKWLxxIrcAc"/>
+</div>
+</aside>
+</section>
+</main>
+<!-- Footer for reassurance -->
+<footer class="w-full py-stack-md bg-surface border-t border-outline-variant mt-stack-lg">
+<div class="max-w-container-max mx-auto px-gutter flex flex-col md:flex-row justify-between items-center gap-stack-md text-outline">
+<div class="flex items-center gap-stack-sm">
+<span class="material-symbols-outlined text-[20px]" data-icon="verified_user">verified_user</span>
+<span class="font-label-sm text-label-sm">ISO 27001 Certified Infrastructure</span>
+</div>
+<div class="flex gap-stack-md">
+<span class="font-label-sm text-label-sm">Confidentiality Protocol v4.2</span>
+<span class="font-label-sm text-label-sm">Session ID: 48F-29X-001</span>
+<span class="font-label-sm text-label-sm">System ID: DV-{{PLACEHOLDER}}</span></div>
+<span class="font-label-sm text-label-sm">System ID: DV-{{PLACEHOLDER}}</span></div>
+</footer>
+</body></html>

@@ -10,6 +10,7 @@ export function HomePage() {
 
         <nav className="topnav">
           <a href="#reporting">Reporting channel</a>
+          <Link to="/track">Track case</Link>
           <a href="#privacy">Privacy</a>
         </nav>
       </header>
@@ -34,6 +35,9 @@ export function HomePage() {
             <div className="actions actions-centered">
               <Link className="button primary" to="/report">
                 Start a report
+              </Link>
+              <Link className="button secondary" to="/track">
+                Track existing case
               </Link>
               <a className="button secondary" href="#privacy">
                 How confidentiality works

@@ -20,7 +20,19 @@ export function sanitizeReportPayload(
     incidentDateText: sanitizeText(payload.incidentDateText),
     locationText: sanitizeText(payload.locationText),
     peopleInvolved: sanitizeText(payload.peopleInvolved ?? ""),
-    evidenceNotes: sanitizeText(payload.evidenceNotes ?? "")
+    evidenceNotes: sanitizeText(payload.evidenceNotes ?? ""),
+    normalChannelActionSummary: sanitizeText(
+      payload.normalChannelActionSummary
+    ),
+    presidentialEscalationReason: sanitizeText(
+      payload.presidentialEscalationReason
+    ),
+    presidentialEscalationOtherDetail: sanitizeText(
+      payload.presidentialEscalationOtherDetail
+    ),
+    presidentialEscalationFactors: Array.from(
+      new Set(payload.presidentialEscalationFactors)
+    )
   };
 }
 

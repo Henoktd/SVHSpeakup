@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SECURE REPORT - Status Tracker</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-secondary": "#ffffff",
+                    "outline": "#76777d",
+                    "on-primary": "#ffffff",
+                    "on-primary-fixed-variant": "#3f465c",
+                    "surface-container-high": "#e6e8ea",
+                    "outline-variant": "#c6c6cd",
+                    "surface-variant": "#e0e3e5",
+                    "surface": "#f7f9fb",
+                    "on-surface": "#191c1e",
+                    "error-container": "#ffdad6",
+                    "on-primary-fixed": "#131b2e",
+                    "on-tertiary-fixed": "#00174b",
+                    "secondary-fixed-dim": "#b9c7e0",
+                    "surface-tint": "#565e74",
+                    "surface-dim": "#d8dadc",
+                    "on-tertiary-fixed-variant": "#003ea8",
+                    "on-secondary-fixed-variant": "#3a485c",
+                    "on-secondary-container": "#57657b",
+                    "primary": "#000000",
+                    "on-error-container": "#93000a",
+                    "primary-fixed-dim": "#bec6e0",
+                    "tertiary-fixed": "#dbe1ff",
+                    "inverse-surface": "#2d3133",
+                    "on-primary-container": "#7c839b",
+                    "secondary-container": "#d5e3fd",
+                    "on-background": "#191c1e",
+                    "secondary": "#515f74",
+                    "tertiary-container": "#00174b",
+                    "on-tertiary": "#ffffff",
+                    "error": "#ba1a1a",
+                    "tertiary-fixed-dim": "#b4c5ff",
+                    "on-error": "#ffffff",
+                    "surface-container-low": "#f2f4f6",
+                    "surface-bright": "#f7f9fb",
+                    "on-secondary-fixed": "#0d1c2f",
+                    "surface-container-highest": "#e0e3e5",
+                    "inverse-on-surface": "#eff1f3",
+                    "on-surface-variant": "#45464d",
+                    "primary-fixed": "#dae2fd",
+                    "secondary-fixed": "#d5e3fd",
+                    "surface-container": "#eceef0",
+                    "surface-container-lowest": "#ffffff",
+                    "background": "#f7f9fb",
+                    "on-tertiary-container": "#497cff",
+                    "tertiary": "#000000",
+                    "inverse-primary": "#bec6e0",
+                    "primary-container": "#131b2e"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "gutter": "24px",
+                    "container-max": "1024px",
+                    "stack-lg": "48px",
+                    "stack-md": "24px",
+                    "stack-sm": "12px",
+                    "base": "8px",
+                    "margin": "32px"
+            },
+            "fontFamily": {
+                    "headline-sm": ["Public Sans"],
+                    "body-lg": ["Public Sans"],
+                    "body-sm": ["Public Sans"],
+                    "body-md": ["Public Sans"],
+                    "headline-lg": ["Public Sans"],
+                    "label-md": ["Public Sans"],
+                    "label-sm": ["Public Sans"],
+                    "headline-md": ["Public Sans"]
+            },
+            "fontSize": {
+                    "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-lg": ["30px", {"lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "label-md": ["14px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Public Sans', sans-serif; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface">
+<!-- TopAppBar -->
+<header class="bg-surface border-b border-outline-variant docked full-width top-0 z-50">
+<div class="flex justify-between items-center w-full px-gutter h-16 max-w-container-max mx-auto">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary" data-icon="shield">shield</span>
+<span class="font-headline-md text-headline-md font-bold text-primary tracking-tight">SECURE REPORT</span>
+</div>
+<div class="flex items-center gap-6">
+<nav class="hidden md:flex gap-6 items-center">
+<span class="font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-high transition-colors px-3 py-2 cursor-pointer">Report</span>
+<span class="font-label-md text-label-md text-primary font-bold hover:bg-surface-container-high transition-colors px-3 py-2 cursor-pointer border-b-2 border-primary">Track</span>
+<span class="font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-high transition-colors px-3 py-2 cursor-pointer">Policy</span>
+</nav>
+<span class="material-symbols-outlined text-primary" data-icon="lock">lock</span>
+</div>
+</div>
+</header>
+<main class="max-w-container-max mx-auto px-gutter py-margin pb-32">
+<!-- Welcome & Status Header -->
+<section class="mb-stack-lg">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+<div>
+<span class="font-label-md text-label-md text-on-primary-container bg-primary-container px-3 py-1 rounded-full mb-base inline-block">CASE: #XC-992-B</span>
+<h1 class="font-headline-lg text-headline-lg text-on-surface">Submission Tracking</h1>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-2xl mt-base">Your report is being processed. This environment is end-to-end encrypted and completely anonymous.</p>
+</div>
+<div class="flex items-center gap-2 px-4 py-2 bg-surface-container border border-outline-variant rounded-xl">
+<span class="material-symbols-outlined text-tertiary" data-icon="verified_user">verified_user</span>
+<span class="font-label-md text-label-md text-on-surface">Secure Session Active</span>
+</div>
+</div>
+</section>
+<!-- Main Bento Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-stack-md">
+<!-- Left Column: Timeline & Summary (8 cols) -->
+<div class="lg:col-span-8 flex flex-col gap-stack-md">
+<!-- Timeline Component -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-stack-md">
+<h2 class="font-headline-sm text-headline-sm mb-stack-md flex items-center gap-2">
+<span class="material-symbols-outlined" data-icon="timeline">timeline</span>
+                        Report Progress
+                    </h2>
+<div class="relative">
+<!-- Horizontal Timeline Line -->
+<div class="absolute top-5 left-0 w-full h-[2px] bg-outline-variant hidden md:block"></div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-stack-md relative z-10">
+<!-- Step 1: Received -->
+<div class="flex md:flex-col items-center gap-4 md:gap-stack-sm text-center">
+<div class="w-10 h-10 rounded-full bg-primary text-on-primary flex items-center justify-center border-4 border-surface-container-lowest">
+<span class="material-symbols-outlined text-[20px]" data-icon="check_circle">check_circle</span>
+</div>
+<div class="text-left md:text-center">
+<p class="font-label-md text-label-md text-on-surface">Received</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Oct 12, 2023</p>
+</div>
+</div>
+<!-- Step 2: Investigation (Active) -->
+<div class="flex md:flex-col items-center gap-4 md:gap-stack-sm text-center">
+<div class="w-10 h-10 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center border-4 border-surface-container-lowest ring-2 ring-secondary ring-offset-2">
+<span class="material-symbols-outlined text-[20px]" data-icon="manage_search">manage_search</span>
+</div>
+<div class="text-left md:text-center">
+<p class="font-label-md text-label-md text-on-surface font-bold">Investigation</p>
+<p class="font-body-sm text-body-sm text-on-tertiary-container">In Progress</p>
+</div>
+</div>
+<!-- Step 3: Action -->
+<div class="flex md:flex-col items-center gap-4 md:gap-stack-sm text-center opacity-40">
+<div class="w-10 h-10 rounded-full bg-surface-container-high text-on-surface-variant flex items-center justify-center border-4 border-surface-container-lowest">
+<span class="material-symbols-outlined text-[20px]" data-icon="gavel">gavel</span>
+</div>
+<div class="text-left md:text-center">
+<p class="font-label-md text-label-md text-on-surface-variant">Action Taken</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Pending</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Case Summary -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-stack-md">
+<div class="flex justify-between items-start mb-stack-md">
+<h2 class="font-headline-sm text-headline-sm flex items-center gap-2">
+<span class="material-symbols-outlined" data-icon="description">description</span>
+                            Case Summary
+                        </h2>
+<span class="bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm px-3 py-1 rounded-full border border-outline-variant">INTERNAL_USE_ONLY</span>
+</div>
+<div class="space-y-stack-md">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-stack-md">
+<div>
+<label class="font-label-md text-label-md text-outline uppercase block mb-1">Subject Category</label>
+<p class="font-body-md text-body-md text-on-surface">Financial Non-Compliance</p>
+</div>
+<div>
+<label class="font-label-md text-label-md text-outline uppercase block mb-1">Reporting Entity</label>
+<p class="font-body-md text-body-md text-on-surface">Global Operations - APAC</p>
+</div>
+</div>
+<div>
+<label class="font-label-md text-label-md text-outline uppercase block mb-1">Narrative Snippet</label>
+<p class="font-body-md text-body-md text-on-surface bg-surface p-4 border-l-4 border-primary rounded-r-lg">
+                                "Observations regarding irregular procurement cycles in the Q3 window... multiple discrepancies noted in the vendor approval workflow..."
+                            </p>
+</div>
+<div class="pt-4 border-t border-outline-variant">
+<label class="font-label-md text-label-md text-outline uppercase block mb-3">Evidence Submitted (2 Files)</label>
+<div class="flex flex-wrap gap-stack-sm">
+<div class="flex items-center gap-3 p-3 bg-surface border border-outline-variant rounded-xl hover:bg-surface-container-high transition-colors cursor-pointer group">
+<span class="material-symbols-outlined text-primary" data-icon="article">article</span>
+<div class="text-left">
+<p class="font-label-md text-label-md text-on-surface">ledger_2023_q3.pdf</p>
+<p class="font-label-sm text-label-sm text-outline">Encrypted PDF • 1.4 MB</p>
+</div>
+<span class="material-symbols-outlined text-outline group-hover:text-primary" data-icon="download">download</span>
+</div>
+<div class="flex items-center gap-3 p-3 bg-surface border border-outline-variant rounded-xl hover:bg-surface-container-high transition-colors cursor-pointer group">
+<span class="material-symbols-outlined text-primary" data-icon="image">image</span>
+<div class="text-left">
+<p class="font-label-md text-label-md text-on-surface">capture_001.jpg</p>
+<p class="font-label-sm text-label-sm text-outline">Encrypted Image • 842 KB</p>
+</div>
+<span class="material-symbols-outlined text-outline group-hover:text-primary" data-icon="download">download</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Secure Messaging (4 cols) -->
+<div class="lg:col-span-4 h-full">
+<div class="bg-surface-container-high border border-outline-variant rounded-xl flex flex-col h-[600px] sticky top-24">
+<!-- Chat Header -->
+<div class="p-4 border-b border-outline-variant bg-on-primary-fixed text-primary-fixed flex items-center justify-between rounded-t-xl">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-primary-fixed-dim flex items-center justify-center">
+<span class="material-symbols-outlined text-primary-container" data-icon="support_agent">support_agent</span>
+</div>
+<div>
+<p class="font-label-md text-label-md">Compliance Officer</p>
+<div class="flex items-center gap-1">
+<div class="w-2 h-2 rounded-full bg-success-500 bg-green-500"></div>
+<p class="font-label-sm text-label-sm opacity-80">Secure Channel</p>
+</div>
+</div>
+</div>
+<span class="material-symbols-outlined cursor-pointer" data-icon="settings">settings</span>
+</div>
+<!-- Chat Messages -->
+<div class="flex-1 p-4 overflow-y-auto space-y-4 bg-surface-container-high">
+<div class="text-center py-2">
+<span class="font-label-sm text-label-sm text-outline px-3 py-1 bg-surface-container-highest rounded-full">Conversation started Oct 12</span>
+</div>
+<!-- Officer Message -->
+<div class="flex flex-col items-start max-w-[85%]">
+<div class="bg-surface-container-lowest text-on-surface p-3 rounded-xl rounded-tl-none border border-outline-variant shadow-sm">
+<p class="font-body-sm text-body-sm">Thank you for this information. We are currently verifying the procurement logs you provided. Could you confirm the department head name involved?</p>
+</div>
+<span class="font-label-sm text-label-sm text-outline mt-1 ml-1">10:45 AM</span>
+</div>
+<!-- User Message (Anonymous) -->
+<div class="flex flex-col items-end max-w-[85%] ml-auto">
+<div class="bg-primary text-on-primary p-3 rounded-xl rounded-tr-none shadow-sm">
+<p class="font-body-sm text-body-sm">The records were primarily signed off by the Regional Controller. I don't want to disclose my department yet for safety reasons.</p>
+</div>
+<span class="font-label-sm text-label-sm text-outline mt-1 mr-1">11:02 AM</span>
+</div>
+<!-- Officer Message -->
+<div class="flex flex-col items-start max-w-[85%]">
+<div class="bg-surface-container-lowest text-on-surface p-3 rounded-xl rounded-tl-none border border-outline-variant shadow-sm">
+<p class="font-body-sm text-body-sm">Understood. Your anonymity is fully protected under Policy 14-B. We will proceed with the log audit first.</p>
+</div>
+<span class="font-label-sm text-label-sm text-outline mt-1 ml-1">11:15 AM</span>
+</div>
+</div>
+<!-- Chat Input -->
+<div class="p-4 border-t border-outline-variant bg-surface-container-highest rounded-b-xl">
+<div class="relative">
+<textarea class="w-full bg-surface border border-outline-variant rounded-xl p-3 pr-12 focus:ring-2 focus:ring-primary focus:border-transparent outline-none resize-none font-body-sm text-body-sm" placeholder="Type a secure message..." rows="2"></textarea>
+<button class="absolute bottom-3 right-3 text-primary hover:scale-110 transition-transform">
+<span class="material-symbols-outlined" data-icon="send">send</span>
+</button>
+</div>
+<div class="mt-2 flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-outline" data-icon="attach_file">attach_file</span>
+<span class="font-label-sm text-label-sm text-outline">Attachments are encrypted</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-2 bg-surface border-t border-outline-variant">
+<div class="flex flex-col items-center justify-center text-on-surface-variant p-2">
+<span class="material-symbols-outlined" data-icon="add_moderator">add_moderator</span>
+<span class="font-label-sm text-label-sm">Report</span>
+</div>
+<div class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-xl px-4 py-1 scale-95">
+<span class="material-symbols-outlined" data-icon="manage_search">manage_search</span>
+<span class="font-label-sm text-label-sm">Track</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant p-2">
+<span class="material-symbols-outlined" data-icon="policy">policy</span>
+<span class="font-label-sm text-label-sm">Policy</span>
+</div>
+</nav>
+<!-- Success Indicator / FAB Placeholder (Suppressed on Details as per Rules) -->
+<!-- Security Footer -->
+<footer class="bg-surface-container py-margin border-t border-outline-variant mt-stack-lg">
+<div class="max-w-container-max mx-auto px-gutter grid grid-cols-1 md:grid-cols-2 gap-stack-md">
+<div class="flex items-center gap-4">
+<img class="h-10" data-alt="A macro photograph of a heavy industrial steel padlock with a matte black finish, set against a pristine white background. Soft, professional studio lighting emphasizes the solid, impenetrable texture of the metal, creating a sense of absolute security and corporate authority. The image is clean and minimalist, following a modern corporate aesthetic of high contrast and structural clarity." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBwX37xk9t66IsHTwEbr2HV8ab_psX4qPLaMA3gZoNWpzYRaJaNBH25hg9XX0l5IUoxpaUHx-IxScH9K2eSgREuxsrXph_wx5Nh9Jjek6xjBTxb26TLPxaxsciaZok-xTSTeQAIfvdfi867rNHbuSItr3xNAkbo5OVvRCxJDUIRjnj4TXawdpRs5wrFbg7YGquMFOVciOtjhq-707HSAZUYYTWUOFjVqE4OtHkC2xvtq0mDr74EutiG6ptzNq4FOseX4kz0D1KsKWZL"/>
+<p class="font-body-sm text-body-sm text-outline max-w-xs">Data encrypted with AES-256 and PGP standards. Zero-knowledge logging architecture.</p>
+</div>
+<div class="flex md:justify-end gap-stack-md items-center">
+<span class="font-label-sm text-label-sm text-on-surface-variant hover:underline cursor-pointer">Security Protocol</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant hover:underline cursor-pointer">Terms of Anonymity</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant hover:underline cursor-pointer">Contact Legal</span>
+</div>
+</div>
+</footer>
+</body></html>

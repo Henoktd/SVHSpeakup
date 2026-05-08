@@ -8,6 +8,9 @@
     "typecheck": "tsc -p tsconfig.json"
   },
   "dependencies": {
+    "@azure/msal-browser": "^5.9.0",
+    "@azure/msal-react": "^5.3.2",
+    "@svh/types": "workspace:*",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },

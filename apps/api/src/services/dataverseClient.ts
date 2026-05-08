@@ -10,6 +10,35 @@ interface CachedToken {
   expiresAt: number;
 }
 
+interface ChoiceMetadataResponse {
+  OptionSet?: {
+    Options?: Array<{
+      Value?: number;
+      Label?: {
+        UserLocalizedLabel?: {
+          Label?: string;
+        } | null;
+      } | null;
+    }>;
+  };
+}
+
+export interface DataverseChoiceOption {
+  label: string;
+  value: number;
+}
+
+interface DataverseListResponse {
+  value?: Array<Record<string, unknown>>;
+}
+
+interface QueryRowsOptions {
+  filter?: string;
+  orderBy?: string;
+  select?: string[];
+  top?: number;
+}
+
 export class DataverseClient {
   private cachedToken: CachedToken | null = null;
 
@@ -85,6 +114,121 @@ export class DataverseClient {
     }
   }
 
+  async getFirstRowByField(
+    entitySetName: string,
+    fieldName: string,
+    fieldValue: string,
+    select?: string[]
+  ): Promise<Record<string, unknown> | null> {
+    const rows = await this.queryRows(entitySetName, {
+      filter: `${fieldName} eq '${this.escapeFilterValue(fieldValue)}'`,
+      select,
+      top: 1
+    });
+
+    return rows[0] ?? null;
+  }
+
+  async queryRows(
+    entitySetName: string,
+    options: QueryRowsOptions = {}
+  ): Promise<Array<Record<string, unknown>>> {
+    const accessToken = await this.getAccessToken();
+    const queryParts: string[] = [];
+
+    if (options.select && options.select.length > 0) {
+      queryParts.push(`$select=${options.select.join(",")}`);
+    }
+
+    if (options.filter) {
+      queryParts.push(`$filter=${encodeURIComponent(options.filter)}`);
+    }
+
+    if (options.orderBy) {
+      queryParts.push(`$orderby=${encodeURIComponent(options.orderBy)}`);
+    }
+
+    if (typeof options.top === "number") {
+      queryParts.push(`$top=${options.top}`);
+    }
+
+    const queryString =
+      queryParts.length > 0 ? `?${queryParts.join("&")}` : "";
+    const response = await fetch(
+      `${this.buildEntityUrl(entitySetName)}${queryString}`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          Accept: "application/json",
+          "OData-MaxVersion": "4.0",
+          "OData-Version": "4.0"
+        }
+      }
+    );
+
+    if (!response.ok) {
+      const errorText = await response.text();
+
+      throw new Error(
+        `Dataverse query failed for ${entitySetName}: ${response.status} ${errorText}`
+      );
+    }
+
+    const data = (await response.json()) as DataverseListResponse;
+
+    return data.value ?? [];
+  }
+
+  async getChoiceOptions(
+    entityLogicalName: string,
+    fieldLogicalName: string
+  ): Promise<DataverseChoiceOption[]> {
+    const accessToken = await this.getAccessToken();
+    const metadataTypes = [
+      "Microsoft.Dynamics.CRM.PicklistAttributeMetadata",
+      "Microsoft.Dynamics.CRM.MultiSelectPicklistAttributeMetadata"
+    ];
+    let lastError: string | null = null;
+
+    for (const metadataType of metadataTypes) {
+      const response = await fetch(
+        `${this.getApiRoot()}/EntityDefinitions(LogicalName='${entityLogicalName}')/Attributes(LogicalName='${fieldLogicalName}')/${metadataType}?$select=LogicalName&$expand=OptionSet`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            Accept: "application/json",
+            "OData-MaxVersion": "4.0",
+            "OData-Version": "4.0"
+          }
+        }
+      );
+
+      if (!response.ok) {
+        lastError = `${response.status} ${await response.text()}`;
+        continue;
+      }
+
+      const data = (await response.json()) as ChoiceMetadataResponse;
+      const options =
+        data.OptionSet?.Options?.flatMap((option) => {
+          const label = option.Label?.UserLocalizedLabel?.Label?.trim();
+          const value = option.Value;
+
+          if (!label || typeof value !== "number" || !Number.isInteger(value)) {
+            return [];
+          }
+
+          return [{ label, value }];
+        }) ?? [];
+
+      return options;
+    }
+
+    throw new Error(
+      `Dataverse metadata lookup failed for ${entityLogicalName}.${fieldLogicalName}: ${lastError ?? "Unsupported choice column."}`
+    );
+  }
+
   private buildEntityUrl(entitySetName: string) {
     return `${this.getApiRoot()}/${entitySetName}`;
   }
@@ -100,7 +244,7 @@ export class DataverseClient {
     primaryIdField: string,
     accessToken: string
   ): Promise<string | null> {
-    const filter = `${fieldName} eq '${fieldValue.replace(/'/g, "''")}'`;
+    const filter = `${fieldName} eq '${this.escapeFilterValue(fieldValue)}'`;
     const url = `${this.buildEntityUrl(
       entitySetName
     )}?$select=${primaryIdField}&$filter=${encodeURIComponent(filter)}&$top=1`;
@@ -122,9 +266,7 @@ export class DataverseClient {
       );
     }
 
-    const data = (await response.json()) as {
-      value?: Array<Record<string, unknown>>;
-    };
+    const data = (await response.json()) as DataverseListResponse;
     const firstRecord = data.value?.[0];
 
     if (!firstRecord) {
@@ -137,6 +279,10 @@ export class DataverseClient {
 
   private getOrganizationUrl() {
     return this.config.organizationUrl!.replace(/\/$/, "");
+  }
+
+  private escapeFilterValue(value: string) {
+    return value.replace(/'/g, "''");
   }
 
   private async getAccessToken(): Promise<string> {
