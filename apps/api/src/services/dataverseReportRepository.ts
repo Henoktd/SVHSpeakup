@@ -113,16 +113,10 @@ export class DataverseReportRepository {
   }
 
   async getReporterCategoryOptions(): Promise<ReportCategoryOption[]> {
-    if (!this.client) {
-      return reportCategoryValues.map((value) => ({
-        value,
-        label: this.toChoiceLabel(value)
-      }));
-    }
-
-    const options = await this.client.getChoiceOptions(
-      this.config.casesLogicalName,
-      this.config.caseFields.category
+    const options = await this.getChoiceOptions(
+      this.config.caseFields.category,
+      this.config.optionMaps.category,
+      reportCategoryValues
     );
 
     return options.map((option) => ({
@@ -641,16 +635,60 @@ export class DataverseReportRepository {
 
   private async getChoiceOptions(
     fieldName: string,
-    optionMap: Record<string, number>
+    optionMap: Record<string, number>,
+    fallbackKeys: readonly string[] = []
   ): Promise<DataverseChoiceOption[]> {
     if (this.client) {
-      return this.client.getChoiceOptions(this.config.casesLogicalName, fieldName);
+      try {
+        return await this.client.getChoiceOptions(
+          this.config.casesLogicalName,
+          fieldName
+        );
+      } catch (error) {
+        const fallbackOptions = this.getConfiguredChoiceOptions(
+          optionMap,
+          fallbackKeys
+        );
+
+        if (fallbackOptions.length > 0) {
+          console.warn(
+            `Dataverse metadata lookup failed for ${this.config.casesLogicalName}.${fieldName}; using configured option map fallback. ${this.formatError(error)}`
+          );
+          return fallbackOptions;
+        }
+
+        throw error;
+      }
     }
 
-    return Object.entries(optionMap).map(([key, value]) => ({
+    return this.getConfiguredChoiceOptions(optionMap, fallbackKeys);
+  }
+
+  private getConfiguredChoiceOptions(
+    optionMap: Record<string, number>,
+    fallbackKeys: readonly string[] = []
+  ): DataverseChoiceOption[] {
+    const mappedOptions = Object.entries(optionMap).map(([key, value]) => ({
       label: this.toChoiceLabel(key),
       value
     }));
+
+    if (mappedOptions.length > 0) {
+      return mappedOptions;
+    }
+
+    return fallbackKeys.map((key, index) => ({
+      label: this.toChoiceLabel(key),
+      value: index + 1
+    }));
+  }
+
+  private formatError(error: unknown): string {
+    if (error instanceof Error) {
+      return error.message;
+    }
+
+    return String(error);
   }
 
   private getStatusPresentation(
