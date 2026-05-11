@@ -625,9 +625,7 @@ function buildPresidentialEscalationReason(values: ReportFormValues) {
     return "";
   }
 
-  return `Selected escalation factors: ${selectedFactors
-    .map((factor) => presidentialEscalationFactorLabels[factor])
-    .join(", ")}`;
+  return "See selected escalation factors.";
 }
 
 function formatFileSize(size: number) {
