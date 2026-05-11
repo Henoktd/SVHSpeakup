@@ -617,7 +617,16 @@ export class DataverseReportRepository {
       configuredEntries.map(([key, value]) => [value, key])
     );
     const lookup = new Map<number, ChoiceLookupItem>();
-    const options = await this.getChoiceOptions(fieldName, optionMap);
+    let options: DataverseChoiceOption[];
+
+    try {
+      options = await this.getChoiceOptions(fieldName, optionMap);
+    } catch (error) {
+      console.warn(
+        `Dataverse choice lookup failed for ${this.config.casesLogicalName}.${fieldName}; continuing without labels. ${this.formatError(error)}`
+      );
+      return lookup;
+    }
 
     for (const option of options) {
       const configuredKey =
@@ -855,11 +864,21 @@ export class DataverseReportRepository {
       return undefined;
     }
 
-    const resolvedValues = await Promise.all(
-      submittedValues.map((submittedValue) =>
-        this.resolveChoiceValue(submittedValue, fieldName, optionMap)
-      )
-    );
+    let resolvedValues: Array<number | undefined>;
+
+    try {
+      resolvedValues = await Promise.all(
+        submittedValues.map((submittedValue) =>
+          this.resolveChoiceValue(submittedValue, fieldName, optionMap)
+        )
+      );
+    } catch (error) {
+      console.warn(
+        `Dataverse multi-select lookup failed for ${this.config.casesLogicalName}.${fieldName}; skipping this optional field. ${this.formatError(error)}`
+      );
+      return undefined;
+    }
+
     const deduplicatedValues = Array.from(
       new Set(
         resolvedValues.filter((value): value is number => value !== undefined)
