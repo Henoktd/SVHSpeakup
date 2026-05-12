@@ -54,6 +54,7 @@ const reporterEmailService = new ReporterEmailService(appConfig);
 const investigatorAuthMiddleware = createInvestigatorAuthMiddleware(
   appConfig.investigatorAuth
 );
+const buildMarker = "2026-05-12-legacy-other-detail-strip";
 
 app.use(
   cors({
@@ -149,9 +150,20 @@ async function saveEvidenceFiles(
 app.get("/health", (_request, response) => {
   response.json({
     ok: true,
+    build: {
+      marker: buildMarker
+    },
     dataverse: {
       mode: appConfig.dataverse.mode,
-      configured: appConfig.dataverse.configured
+      configured: appConfig.dataverse.configured,
+      fieldMappings: {
+        presidentialEscalationReason:
+          appConfig.dataverse.caseFields.presidentialEscalationReason,
+        presidentialEscalationFactors:
+          appConfig.dataverse.caseFields.presidentialEscalationFactors,
+        presidentialEscalationOtherDetail:
+          appConfig.dataverse.caseFields.presidentialEscalationOtherDetail
+      }
     }
   });
 });
