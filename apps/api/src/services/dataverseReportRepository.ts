@@ -401,11 +401,6 @@ export class DataverseReportRepository {
     );
     this.assignNonEmptyStringField(
       payload,
-      this.config.caseFields.presidentialEscalationOtherDetail,
-      caseRecord.presidentialEscalationOtherDetail
-    );
-    this.assignNonEmptyStringField(
-      payload,
       this.config.caseFields.reporterEmail,
       caseRecord.reporterEmail ?? ""
     );
@@ -595,10 +590,7 @@ export class DataverseReportRepository {
         row,
         this.config.caseFields.presidentialEscalationFactors
       ),
-      presidentialEscalationOtherDetail: this.readString(
-        row,
-        this.config.caseFields.presidentialEscalationOtherDetail
-      ),
+      presidentialEscalationOtherDetail: "",
       potentialImpactValue: this.readNumber(
         row,
         this.config.caseFields.potentialImpact
@@ -781,7 +773,6 @@ export class DataverseReportRepository {
         this.config.caseFields.normalChannelActionSummary,
         this.config.caseFields.presidentialEscalationReason,
         this.config.caseFields.presidentialEscalationFactors,
-        this.config.caseFields.presidentialEscalationOtherDetail,
         this.config.caseFields.potentialImpact,
         this.config.caseFields.urgency,
         this.config.caseFields.status,
