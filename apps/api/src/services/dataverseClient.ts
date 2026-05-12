@@ -49,6 +49,7 @@ export class DataverseClient {
     payload: Record<string, unknown>
   ): Promise<void> {
     const accessToken = await this.getAccessToken();
+    const sanitizedPayload = this.sanitizeCreatePayload(payload);
     const response = await fetch(this.buildEntityUrl(entitySetName), {
       method: "POST",
       headers: {
@@ -58,7 +59,7 @@ export class DataverseClient {
         "OData-MaxVersion": "4.0",
         "OData-Version": "4.0"
       },
-      body: JSON.stringify(payload)
+      body: JSON.stringify(sanitizedPayload)
     });
 
     if (!response.ok) {
@@ -231,6 +232,17 @@ export class DataverseClient {
 
   private buildEntityUrl(entitySetName: string) {
     return `${this.getApiRoot()}/${entitySetName}`;
+  }
+
+  private sanitizeCreatePayload(payload: Record<string, unknown>) {
+    const sanitizedPayload = { ...payload };
+
+    // This legacy optional column was removed from the reporter form. Some cPanel
+    // deployments/env mappings may still try to send it, but the rebuilt Dataverse
+    // table no longer has this property.
+    delete sanitizedPayload.svh_presidentialescalationotherdetail;
+
+    return sanitizedPayload;
   }
 
   private getApiRoot() {
