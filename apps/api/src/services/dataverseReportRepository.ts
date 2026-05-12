@@ -856,9 +856,11 @@ export class DataverseReportRepository {
         fieldName
       );
       const normalizedSubmittedValue = this.normalizeChoiceKey(submittedValue);
+      const aliasKeys = this.getChoiceAliasKeys(fieldName, normalizedSubmittedValue);
       const matchedOption = options.find(
         (option) =>
           this.normalizeChoiceKey(option.label) === normalizedSubmittedValue ||
+          aliasKeys.includes(this.normalizeChoiceKey(option.label)) ||
           option.label.localeCompare(submittedValue, undefined, {
             sensitivity: "accent"
           }) === 0
@@ -879,6 +881,23 @@ export class DataverseReportRepository {
     }
 
     return undefined;
+  }
+
+  private getChoiceAliasKeys(fieldName: string, normalizedSubmittedValue: string) {
+    if (fieldName !== this.config.caseFields.status) {
+      return [];
+    }
+
+    switch (normalizedSubmittedValue) {
+      case "new":
+        return ["open", "under_review"];
+      case "triage":
+        return ["under_review", "open"];
+      case "waiting_for_reporter":
+        return ["under_review", "investigating"];
+      default:
+        return [];
+    }
   }
 
   private async resolveMultiSelectChoiceValues(
