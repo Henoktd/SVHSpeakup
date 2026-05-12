@@ -372,21 +372,43 @@ export class DataverseReportRepository {
       [this.config.caseFields.title]: caseRecord.title,
       [this.config.caseFields.description]: caseRecord.description,
       [this.config.caseFields.locationText]: caseRecord.locationText,
-      [this.config.caseFields.peopleInvolved]: caseRecord.peopleInvolved,
-      [this.config.caseFields.evidenceNotes]: caseRecord.evidenceNotes,
       [this.config.caseFields.raisedThroughNormalChannels]:
         caseRecord.raisedThroughNormalChannels,
-      [this.config.caseFields.normalChannelActionSummary]:
-        caseRecord.normalChannelActionSummary,
-      [this.config.caseFields.presidentialEscalationReason]:
-        caseRecord.presidentialEscalationReason,
-      [this.config.caseFields.presidentialEscalationOtherDetail]:
-        caseRecord.presidentialEscalationOtherDetail,
-      [this.config.caseFields.reporterEmail]: caseRecord.reporterEmail ?? null,
       [this.config.caseFields.confidentialityAccepted]:
         caseRecord.confidentialityAccepted,
       [this.config.caseFields.consentAccepted]: caseRecord.consentAccepted
     };
+
+    this.assignNonEmptyStringField(
+      payload,
+      this.config.caseFields.peopleInvolved,
+      caseRecord.peopleInvolved ?? ""
+    );
+    this.assignNonEmptyStringField(
+      payload,
+      this.config.caseFields.evidenceNotes,
+      caseRecord.evidenceNotes ?? ""
+    );
+    this.assignNonEmptyStringField(
+      payload,
+      this.config.caseFields.normalChannelActionSummary,
+      caseRecord.normalChannelActionSummary
+    );
+    this.assignNonEmptyStringField(
+      payload,
+      this.config.caseFields.presidentialEscalationReason,
+      caseRecord.presidentialEscalationReason ?? ""
+    );
+    this.assignNonEmptyStringField(
+      payload,
+      this.config.caseFields.presidentialEscalationOtherDetail,
+      caseRecord.presidentialEscalationOtherDetail
+    );
+    this.assignNonEmptyStringField(
+      payload,
+      this.config.caseFields.reporterEmail,
+      caseRecord.reporterEmail ?? ""
+    );
 
     this.assignField(
       payload,
@@ -800,6 +822,16 @@ export class DataverseReportRepository {
     value: unknown
   ) {
     if (value !== undefined) {
+      payload[fieldName] = value;
+    }
+  }
+
+  private assignNonEmptyStringField(
+    payload: Record<string, unknown>,
+    fieldName: string,
+    value: string
+  ) {
+    if (value.trim()) {
       payload[fieldName] = value;
     }
   }
