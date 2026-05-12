@@ -461,6 +461,9 @@ export class DataverseReportRepository {
       this.toDataverseDateTime(caseRecord.submittedAt)
     );
 
+    delete payload[this.config.caseFields.presidentialEscalationOtherDetail];
+    delete payload.svh_presidentialescalationotherdetail;
+
     return payload;
   }
 
