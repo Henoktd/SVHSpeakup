@@ -242,6 +242,14 @@ export class DataverseClient {
     // table no longer has this property.
     delete sanitizedPayload.svh_presidentialescalationotherdetail;
 
+    // Guard against accidental double-prefixed schema names coming from stale
+    // cPanel env overrides, for example svh_svh_presidentialescalationfactors.
+    for (const key of Object.keys(sanitizedPayload)) {
+      if (key.startsWith("svh_svh_")) {
+        delete sanitizedPayload[key];
+      }
+    }
+
     return sanitizedPayload;
   }
 
