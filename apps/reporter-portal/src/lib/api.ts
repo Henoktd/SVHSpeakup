@@ -8,13 +8,28 @@ import type {
   SaveReporterEmailResponse
 } from "@svh/types";
 
-const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL ?? "http://localhost:3001";
+const configuredApiBaseUrl = import.meta.env.VITE_API_BASE_URL?.trim();
+
+function getApiBaseUrl(): string {
+  if (configuredApiBaseUrl) {
+    return configuredApiBaseUrl;
+  }
+
+  if (import.meta.env.DEV) {
+    return "http://localhost:3001";
+  }
+
+  throw new Error(
+    "Reporter API base URL is not configured for this deployment."
+  );
+}
 
 export async function createReport(
   payload: CreateReportRequest,
   evidenceFiles: File[] = []
 ): Promise<CreateReportResponse> {
+  const apiBaseUrl = getApiBaseUrl();
+
   if (evidenceFiles.length > 0) {
     const formData = new FormData();
 
@@ -24,7 +39,7 @@ export async function createReport(
       formData.append("evidenceFiles", file);
     }
 
-    const response = await fetch(`${API_BASE_URL}/api/reports`, {
+    const response = await fetch(`${apiBaseUrl}/api/reports`, {
       method: "POST",
       body: formData
     });
@@ -37,7 +52,7 @@ export async function createReport(
     return response.json() as Promise<CreateReportResponse>;
   }
 
-  const response = await fetch(`${API_BASE_URL}/api/reports`, {
+  const response = await fetch(`${apiBaseUrl}/api/reports`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
@@ -54,7 +69,8 @@ export async function createReport(
 }
 
 export async function getReporterFormOptions(): Promise<ReporterFormOptionsResponse> {
-  const response = await fetch(`${API_BASE_URL}/api/reports/options`);
+  const apiBaseUrl = getApiBaseUrl();
+  const response = await fetch(`${apiBaseUrl}/api/reports/options`);
 
   if (!response.ok) {
     const errorText = await response.text();
@@ -67,7 +83,8 @@ export async function getReporterFormOptions(): Promise<ReporterFormOptionsRespo
 export async function saveReporterEmail(
   payload: SaveReporterEmailRequest
 ): Promise<SaveReporterEmailResponse> {
-  const response = await fetch(`${API_BASE_URL}/api/reports/email`, {
+  const apiBaseUrl = getApiBaseUrl();
+  const response = await fetch(`${apiBaseUrl}/api/reports/email`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
@@ -86,7 +103,8 @@ export async function saveReporterEmail(
 export async function accessReporterCase(
   payload: ReporterAccessRequest
 ): Promise<ReporterCaseAccessResponse> {
-  const response = await fetch(`${API_BASE_URL}/api/reports/access`, {
+  const apiBaseUrl = getApiBaseUrl();
+  const response = await fetch(`${apiBaseUrl}/api/reports/access`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json"

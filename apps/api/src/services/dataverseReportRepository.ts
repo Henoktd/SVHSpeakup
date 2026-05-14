@@ -846,17 +846,25 @@ export class DataverseReportRepository {
 
     const configuredValue = optionMap[submittedValue];
 
-    if (configuredValue !== undefined) {
-      return configuredValue;
-    }
-
     if (this.client) {
-      const options = await this.client.getChoiceOptions(
-        this.config.casesLogicalName,
-        fieldName
-      );
+      const options = await this.getChoiceOptions(fieldName, optionMap);
       const normalizedSubmittedValue = this.normalizeChoiceKey(submittedValue);
       const aliasKeys = this.getChoiceAliasKeys(fieldName, normalizedSubmittedValue);
+
+      if (configuredValue !== undefined) {
+        const configuredOption = options.find(
+          (option) => option.value === configuredValue
+        );
+
+        if (configuredOption) {
+          return configuredValue;
+        }
+
+        console.warn(
+          `Configured Dataverse choice value ${configuredValue} for ${this.config.casesLogicalName}.${fieldName} no longer exists; falling back to live metadata for "${submittedValue}".`
+        );
+      }
+
       const matchedOption = options.find(
         (option) =>
           this.normalizeChoiceKey(option.label) === normalizedSubmittedValue ||
@@ -878,6 +886,10 @@ export class DataverseReportRepository {
           )
           .join(", ")}`
       );
+    }
+
+    if (configuredValue !== undefined) {
+      return configuredValue;
     }
 
     return undefined;
