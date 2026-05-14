@@ -1,5 +1,21 @@
 import { z } from "zod";
 
+const envBoolean = z.preprocess((value) => {
+  if (typeof value === "string") {
+    const normalized = value.trim().toLowerCase();
+
+    if (normalized === "true") {
+      return true;
+    }
+
+    if (normalized === "false") {
+      return false;
+    }
+  }
+
+  return value;
+}, z.boolean());
+
 const envSchema = z.object({
   DATAVERSE_MODE: z.enum(["mock", "live"]).default("mock"),
   DATAVERSE_URL: z.string().url().optional(),
@@ -61,14 +77,15 @@ const envSchema = z.object({
   DATAVERSE_AUDIT_CREATED_AT_FIELD: z.string().min(1).default("svh_createdat"),
   SMTP_HOST: z.string().optional(),
   SMTP_PORT: z.coerce.number().default(587),
-  SMTP_SECURE: z.coerce.boolean().default(false),
+  SMTP_SECURE: envBoolean.default(false),
   SMTP_USER: z.string().optional(),
   SMTP_PASSWORD: z.string().optional(),
   SMTP_FROM: z.string().optional(),
+  SMTP_USE_ETHEREAL: envBoolean.default(false),
   REPORTER_PORTAL_URL: z.string().url().default("http://localhost:5173"),
   INVESTIGATOR_PORTAL_URL: z.string().url().optional(),
   CORS_ALLOWED_ORIGINS: z.string().optional(),
-  INVESTIGATOR_AUTH_ENABLED: z.coerce.boolean().default(false),
+  INVESTIGATOR_AUTH_ENABLED: envBoolean.default(false),
   INVESTIGATOR_ENTRA_TENANT_ID: z.string().min(1).optional(),
   INVESTIGATOR_API_AUDIENCES: z.string().optional(),
   INVESTIGATOR_ALLOWED_GROUP_IDS: z.string().optional(),
@@ -134,6 +151,7 @@ export interface AppConfig {
     password?: string;
     from?: string;
     configured: boolean;
+    useEthereal: boolean;
   };
   investigatorAuth: {
     enabled: boolean;
@@ -219,6 +237,11 @@ export function getAppConfig(): AppConfig {
     investigatorAllowedGroupIds.length > 0 ||
     investigatorAllowedRoleValues.length > 0 ||
     investigatorAllowedUserOids.length > 0;
+  const smtpConfigured = Boolean(
+    parsed.SMTP_HOST &&
+      parsed.SMTP_FROM &&
+      (!parsed.SMTP_USER || parsed.SMTP_PASSWORD)
+  );
   const corsAllowedOrigins = Array.from(
     new Set(
       [
@@ -312,12 +335,8 @@ export function getAppConfig(): AppConfig {
       user: parsed.SMTP_USER,
       password: parsed.SMTP_PASSWORD,
       from: parsed.SMTP_FROM,
-      configured: Boolean(
-        parsed.SMTP_HOST &&
-          parsed.SMTP_USER &&
-          parsed.SMTP_PASSWORD &&
-          parsed.SMTP_FROM
-      )
+      configured: smtpConfigured,
+      useEthereal: parsed.SMTP_USE_ETHEREAL
     },
     investigatorAuth: {
       enabled: parsed.INVESTIGATOR_AUTH_ENABLED,

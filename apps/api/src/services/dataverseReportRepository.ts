@@ -101,15 +101,27 @@ export class DataverseReportRepository {
       );
     }
 
-    await this.client.updateFirstByField(
-      this.config.casesEntitySet,
-      this.config.caseFields.caseId,
-      caseId,
-      this.getCasePrimaryIdField(),
-      {
-        [this.config.caseFields.reporterEmail]: reporterEmail
-      }
-    );
+    const latestCaseRow = await this.getLatestCaseRow(caseId, [
+      this.getCasePrimaryIdField()
+    ]);
+
+    if (!latestCaseRow) {
+      throw new Error(
+        `No ${this.config.casesEntitySet} record found for caseId=${caseId}.`
+      );
+    }
+
+    const recordId = latestCaseRow[this.getCasePrimaryIdField()];
+
+    if (typeof recordId !== "string" || !recordId) {
+      throw new Error(
+        `Unable to determine the primary Dataverse id for caseId=${caseId}.`
+      );
+    }
+
+    await this.client.updateRow(this.config.casesEntitySet, recordId, {
+      [this.config.caseFields.reporterEmail]: reporterEmail
+    });
   }
 
   async getReporterCategoryOptions(): Promise<ReportCategoryOption[]> {
@@ -298,14 +310,27 @@ export class DataverseReportRepository {
       return null;
     }
 
-    const row = await this.client.getFirstRowByField(
-      this.config.casesEntitySet,
-      this.config.caseFields.caseId,
-      caseId,
-      this.getCaseSelectFields()
-    );
+    const row = await this.getLatestCaseRow(caseId, this.getCaseSelectFields());
 
     return row ? this.toStoredCaseRecord(row) : null;
+  }
+
+  private async getLatestCaseRow(
+    caseId: string,
+    select: string[]
+  ): Promise<Record<string, unknown> | null> {
+    if (!this.client) {
+      return null;
+    }
+
+    const rows = await this.client.queryRows(this.config.casesEntitySet, {
+      filter: `${this.config.caseFields.caseId} eq '${this.escapeFilterValue(caseId)}'`,
+      orderBy: `${this.config.caseFields.submittedAt} desc`,
+      select,
+      top: 1
+    });
+
+    return rows[0] ?? null;
   }
 
   private async getActivityEvents(caseId: string): Promise<CaseActivityEvent[]> {

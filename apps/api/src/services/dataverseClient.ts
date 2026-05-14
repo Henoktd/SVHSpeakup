@@ -115,6 +115,36 @@ export class DataverseClient {
     }
   }
 
+  async updateRow(
+    entitySetName: string,
+    recordId: string,
+    payload: Record<string, unknown>
+  ): Promise<void> {
+    const accessToken = await this.getAccessToken();
+    const response = await fetch(
+      `${this.buildEntityUrl(entitySetName)}(${recordId})`,
+      {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          Accept: "application/json",
+          "Content-Type": "application/json; charset=utf-8",
+          "OData-MaxVersion": "4.0",
+          "OData-Version": "4.0"
+        },
+        body: JSON.stringify(payload)
+      }
+    );
+
+    if (!response.ok) {
+      const errorText = await response.text();
+
+      throw new Error(
+        `Dataverse update failed for ${entitySetName}: ${response.status} ${errorText}`
+      );
+    }
+  }
+
   async getFirstRowByField(
     entitySetName: string,
     fieldName: string,

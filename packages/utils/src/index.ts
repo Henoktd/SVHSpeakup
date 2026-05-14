@@ -13,16 +13,13 @@ const secretWords = [
   "VALLEY"
 ];
 
-let sequence = 123;
-
 export function sanitizeText(value: string) {
   return value.replace(/[<>]/g, "").replace(/\s+/g, " ").trim();
 }
 
 export function generateCaseId() {
-  sequence += 1;
   const year = new Date().getUTCFullYear();
-  const serial = String(sequence).padStart(6, "0");
+  const serial = `${Date.now()}`.slice(-9);
 
   return `SVH-${year}-${serial}`;
 }
