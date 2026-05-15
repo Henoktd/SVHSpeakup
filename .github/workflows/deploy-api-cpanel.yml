@@ -45,10 +45,11 @@ jobs:
       - name: Prepare API deployment bundle
         run: |
           rm -rf .cpanel-deploy/api
-          mkdir -p .cpanel-deploy/api
+          mkdir -p .cpanel-deploy/api/tmp
           cp apps/api/app.js .cpanel-deploy/api/
           cp apps/api/package.json .cpanel-deploy/api/
           cp -r apps/api/dist .cpanel-deploy/api/dist
+          date -u +"%Y-%m-%dT%H:%M:%SZ" > .cpanel-deploy/api/tmp/restart.txt
 
       - name: Deploy API to cPanel
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
