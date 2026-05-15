@@ -54,7 +54,7 @@ const reporterEmailService = new ReporterEmailService(appConfig);
 const investigatorAuthMiddleware = createInvestigatorAuthMiddleware(
   appConfig.investigatorAuth
 );
-const buildMarker = "2026-05-12-legacy-other-detail-strip";
+const buildMarker = "2026-05-15-smtp-diagnostics";
 
 app.use(
   cors({
@@ -164,6 +164,18 @@ app.get("/health", (_request, response) => {
         presidentialEscalationOtherDetail:
           appConfig.dataverse.caseFields.presidentialEscalationOtherDetail
       }
+    },
+    smtp: {
+      deliveryMode: appConfig.smtp.configured
+        ? "smtp"
+        : appConfig.smtp.useEthereal
+          ? "ethereal"
+          : "disabled",
+      configured: appConfig.smtp.configured,
+      useEthereal: appConfig.smtp.useEthereal,
+      hostConfigured: Boolean(appConfig.smtp.host),
+      fromConfigured: Boolean(appConfig.smtp.from),
+      authConfigured: !appConfig.smtp.user || Boolean(appConfig.smtp.password)
     }
   });
 });
@@ -306,7 +318,7 @@ app.post("/api/reports/email", async (request, response) => {
       parsed.data.reporterEmail
     );
 
-    const emailed = await reporterEmailService.sendAccessEmail({
+    const emailDelivery = await reporterEmailService.sendAccessEmail({
       caseId: parsed.data.caseId,
       secret: parsed.data.secret,
       reporterEmail: parsed.data.reporterEmail,
@@ -315,7 +327,7 @@ app.post("/api/reports/email", async (request, response) => {
 
     response.status(200).json({
       saved: true,
-      emailed
+      ...emailDelivery
     });
   } catch (error) {
     const message =
@@ -381,5 +393,8 @@ app.listen(port, () => {
   console.log(`SVH SpeakUp API listening on port ${port}`);
   console.log(
     `Dataverse mode: ${appConfig.dataverse.mode} (${appConfig.dataverse.configured ? "configured" : "not configured"})`
+  );
+  console.log(
+    `SMTP delivery: ${appConfig.smtp.configured ? "smtp" : appConfig.smtp.useEthereal ? "ethereal" : "disabled"} (host: ${Boolean(appConfig.smtp.host)}, from: ${Boolean(appConfig.smtp.from)}, auth: ${!appConfig.smtp.user || Boolean(appConfig.smtp.password)})`
   );
 });
