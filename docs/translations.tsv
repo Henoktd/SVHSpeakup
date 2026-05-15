@@ -1,0 +1,25 @@
+section	key	context	english_source	amharic_translation	translator_notes
+Navigation	nav.reporting	Top navigation link	Reporting channel	ሪፖርት ማድረጊያ መድረክ	
+Navigation	nav.track	Top navigation link	Track case	ጉዳይን ይከታተሉ	
+Home	home.eyebrow	Small label	SVH SpeakUp	SVH SpeakUp	System name preserved
+Home	home.title	Heading	Reporting channel	ሪፖርት ማድረጊያ መድረክ	
+Home	home.lede	Intro paragraph	Use this channel to safely report...	ይህንን መድረክ ስጋቶችን፣ የአሰራር ግድፈቶችን ወይም ኢ-ሥነምግባራዊ ድርጊቶችን በደህንነት ሪፖርት ለማድረግ ይጠቀሙ። 	
+Home	home.startReport	Button	Start a report	ሪፖርት ይጀምሩ	
+Home	home.next.item2	Process step	You receive a case ID and secret.	የጉዳይ መለያ ቁጥር (case ID) እና የጥበቃ ኮድ ይሰጥዎታል። 	
+Report	report.step1.heading	Heading	Report details	የሪፖርቱ ዝርዝር	
+Report	report.category	Field label	Category	ምድብ	
+Report	report.description	Field label	Description	ዝርዝር መግለጫ	
+Report	report.evidenceHint	Helper text	Up to {count} files, 10 MB each.	እስከ {count} ፋይሎች፣ እያንዳንዱ እስከ 10 MB።	Placeholder preserved
+Report	report.escalation.heading	Heading	Justification for Presidential Escalation	ጉዳዩ በቀጥታ ለፕሬዝዳንቱ እንዲቀርብ የተፈለገበት ምክንያት	
+Report	report.raisedChannels	Field label	Has this issue been raised through normal channels?	ይህ ጉዳይ በመደበኛ የአሰራር መድረኮች ቀርቧል? 	
+Report	report.confidentiality.accept	Checkbox	I understand how confidentiality works in this portal.	በዚህ መድረክ ውስጥ ምስጢራዊነት እንዴት እንደሚጠበቅ ተረድቻለሁ። 	
+Report	report.consent.accept	Checkbox	I confirm that this report is submitted in good faith.	ይህ ሪፖርት በቅን ልቦና የቀረበ መሆኑን አረጋግጣለሁ። 	
+Confirmation	confirmation.caseId	Label	Case ID	የጉዳይ መለያ ቁጥር	
+Confirmation	confirmation.secret	Label	Secret	የጥበቃ ኮድ	
+Track	track.title	Heading	Track an existing case	ያለውን ጉዳይ ይከታተሉ	
+Category	categoryLabel.fraud	Label	Fraud	ማጭበርበር	
+Category	categoryLabel.harassment	Label	Harassment	ትንኮሳ	
+Escalation	escalation.fear_of_retaliation	Option	Fear of retaliation	የአጸፋ እርምጃ ፍርሃት	
+Impact	impact.high	Option	High	ከፍተኛ	
+Urgency	urgency.immediate_24_hrs	Option	Immediate (24 hrs)	አስቸኳይ (በ24 ሰዓታት ውስጥ)	
+Validation	error.title_min	Error	Enter a title with at least 5 characters.	እባክዎ ቢያንስ 5 ፊደላት ያለው ርዕስ ያስገቡ። 	

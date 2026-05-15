@@ -1,6 +1,10 @@
 import { Link } from "react-router-dom";
+import { LanguageToggle } from "../components/LanguageToggle";
+import { useLanguage } from "../i18n";
 
 export function HomePage() {
+  const { t } = useLanguage();
+
   return (
     <>
       <header className="topbar shell">
@@ -9,9 +13,10 @@ export function HomePage() {
         </Link>
 
         <nav className="topnav">
-          <a href="#reporting">Reporting channel</a>
-          <Link to="/track">Track case</Link>
-          <a href="#privacy">Privacy</a>
+          <a href="#reporting">{t("nav.reporting")}</a>
+          <Link to="/track">{t("nav.track")}</Link>
+          <a href="#privacy">{t("nav.privacy")}</a>
+          <LanguageToggle />
         </nav>
       </header>
 
@@ -26,21 +31,20 @@ export function HomePage() {
           </div>
 
           <div className="hero-copy hero-copy-centered">
-            <p className="eyebrow">SVH SpeakUp</p>
-            <h1>Reporting channel</h1>
+            <p className="eyebrow">{t("home.eyebrow")}</p>
+            <h1>{t("home.title")}</h1>
             <p className="lede">
-              Use this channel to safely report concerns, misconduct, or
-              unethical behavior. It covers SVH and its ventures.
+              {t("home.lede")}
             </p>
             <div className="actions actions-centered">
               <Link className="button primary" to="/report">
-                Start a report
+                {t("home.startReport")}
               </Link>
               <Link className="button secondary" to="/track">
-                Track existing case
+                {t("home.trackExisting")}
               </Link>
               <a className="button secondary" href="#privacy">
-                How confidentiality works
+                {t("home.confidentiality")}
               </a>
             </div>
           </div>
@@ -48,16 +52,16 @@ export function HomePage() {
 
         <section className="simple-info-grid" id="reporting">
           <article className="simple-card">
-            <h2>What happens next</h2>
+            <h2>{t("home.next.title")}</h2>
             <ul className="check-list compact">
-              <li>Your report is submitted securely.</li>
-              <li>You receive a case ID and secret.</li>
-              <li>You can return later for follow-up.</li>
+              <li>{t("home.next.item1")}</li>
+              <li>{t("home.next.item2")}</li>
+              <li>{t("home.next.item3")}</li>
             </ul>
           </article>
           <article className="simple-card">
-            <h2>Covered entities</h2>
-            <p>This channel covers SVH and 4 ventures.</p>
+            <h2>{t("home.covered.title")}</h2>
+            <p>{t("home.covered.copy")}</p>
             <div className="venture-tags" aria-label="SVH ventures">
               <span className="venture-tag">EASE</span>
               <span className="venture-tag">RRG</span>
@@ -69,13 +73,13 @@ export function HomePage() {
 
         <section className="content-panel content-panel-simple" id="privacy">
           <div className="section-head">
-            <p className="eyebrow">Privacy</p>
-            <h2>Keep your identity safe</h2>
+            <p className="eyebrow">{t("home.privacy.eyebrow")}</p>
+            <h2>{t("home.privacy.title")}</h2>
           </div>
           <ul className="check-list compact">
-            <li>Do not include your name unless you want to share it.</li>
-            <li>Keep your case ID and secret somewhere safe.</li>
-            <li>Be as clear and factual as possible.</li>
+            <li>{t("home.privacy.item1")}</li>
+            <li>{t("home.privacy.item2")}</li>
+            <li>{t("home.privacy.item3")}</li>
           </ul>
         </section>
       </main>

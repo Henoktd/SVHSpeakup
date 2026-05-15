@@ -1,0 +1,189 @@
+section	key	context	english_source	amharic_translation	translator_notes
+Navigation	nav.reporting	Top navigation link	Reporting channel		
+Navigation	nav.track	Top navigation link	Track case		
+Navigation	nav.privacy	Top navigation link or anchor	Privacy		
+Navigation	nav.home	Top navigation link	Home page		
+Navigation	nav.newReport	Top navigation link	New report		
+Language	language.english	Language toggle button label	English		
+Language	language.amharic	Language toggle button label	Amharic		
+Home	home.eyebrow	Small label above home page heading	SVH SpeakUp		
+Home	home.title	Main home page heading	Reporting channel		
+Home	home.lede	Home page intro paragraph	Use this channel to safely report concerns, misconduct, or unethical behavior. It covers SVH and its ventures.		
+Home	home.startReport	Primary action button	Start a report		
+Home	home.trackExisting	Secondary action button	Track existing case		
+Home	home.confidentiality	Section heading or link text	How confidentiality works		
+Home	home.next.title	Card heading	What happens next		
+Home	home.next.item1	Process step text	Your report is submitted securely.		
+Home	home.next.item2	Process step text	You receive a case ID and secret.		
+Home	home.next.item3	Process step text	You can return later for follow-up.		
+Home	home.covered.title	Card heading	Covered entities		
+Home	home.covered.copy	Card copy	This channel covers SVH and 4 ventures.		
+Home	home.privacy.eyebrow	Small label	Privacy		
+Home	home.privacy.title	Privacy section heading	Keep your identity safe		
+Home	home.privacy.item1	Privacy guidance	Do not include your name unless you want to share it.		
+Home	home.privacy.item2	Privacy guidance	Keep your case ID and secret somewhere safe.		
+Home	home.privacy.item3	Privacy guidance	Be as clear and factual as possible.		
+Report	report.eyebrow	Small label above report form heading	Anonymous submission		
+Report	report.title	Report form page heading	New report		
+Report	report.lede	Report form intro paragraph	Submit a concern relating to SVH or one of its ventures. Your report is treated as confidential and can be followed up later with your case ID and secret.		
+Report	report.steps.aria	Accessibility label for step navigation	Report submission steps		
+Report	report.step1.title	Step card title	Report details		
+Report	report.step1.copy	Step card short copy	Share what happened and where.		
+Report	report.step2.title	Step card title	Escalation & submit		
+Report	report.step2.copy	Step card short copy	Add urgency context and confirm submission.		
+Report	report.step1.eyebrow	Small step label	Step 1 of 2		
+Report	report.step1.heading	Section heading	Report details		
+Report	report.step1.help	Section helper text	Start with the core facts so investigators can understand the concern before they review escalation context.		
+Report	report.category	Field label	Category		
+Report	report.loadingCategories	Category dropdown loading text	Loading categories...		
+Report	report.selectCategory	Category dropdown placeholder	Select a category		
+Report	report.titleField	Field label	Title		
+Report	report.titlePlaceholder	Field placeholder	Short summary of the concern		
+Report	report.titleHint	Field helper text	Minimum 5 characters.		
+Report	report.description	Field label	Description		
+Report	report.descriptionPlaceholder	Field placeholder	Describe what happened as concisely as you can. Investigators can follow up later.		
+Report	report.descriptionHint	Field helper text	Minimum 15 characters.		
+Report	report.when	Field label	When did it happen?		
+Report	report.where	Field label	Where did it happen?		
+Report	report.wherePlaceholder	Field placeholder	For example: Nairobi office		
+Report	report.people	Field label	People involved		
+Report	report.peoplePlaceholder	Field placeholder	Optional names, roles, or descriptors		
+Report	report.evidenceNotes	Field label	Evidence notes		
+Report	report.evidenceNotesPlaceholder	Field placeholder	Optional notes about files, screenshots, or witnesses		
+Report	report.evidenceFiles	Field label	Evidence files		
+Report	report.evidenceHint	Field helper text. Preserve {count}.	Up to {count} files, 10 MB each.		
+Report	report.optionsEmpty	Error or empty-state message	No report categories are currently available from Dataverse.		
+Report	report.optionsError	Error message	Unable to load report categories from Dataverse.		
+Report	report.continueCopy	Step action helper text	Continue to add escalation and urgency details.		
+Report	report.next	Button label	Next step		
+Report	report.step2.eyebrow	Small step label	Step 2 of 2		
+Report	report.step2.heading	Section heading	Escalation, impact, and submit		
+Report	report.step2.help	Section helper text	Clarify why this needs higher attention, then confirm the confidentiality and good-faith statements before sending.		
+Report	report.escalation.eyebrow	Small section label	Escalation		
+Report	report.escalation.heading	Section heading	Justification for Presidential Escalation		
+Report	report.raisedChannels	Field label	Has this issue been raised through normal channels?		
+Report	report.selectYesNo	Dropdown placeholder	Select yes or no		
+Report	report.yes	Dropdown option	Yes		
+Report	report.no	Dropdown option	No		
+Report	report.localAction	Conditional field label	If yes, what action was taken or not taken?		
+Report	report.localActionPlaceholder	Conditional field placeholder	Summarize what happened after raising it locally.		
+Report	report.escalationReason	Field label	Why should this be escalated directly to the President?		
+Report	report.impact.eyebrow	Small section label	Impact		
+Report	report.impact.heading	Section heading	Impact & Urgency		
+Report	report.potentialImpact	Field label	Potential impact if not addressed		
+Report	report.selectImpact	Dropdown placeholder	Select impact level		
+Report	report.urgency	Field label	Urgency		
+Report	report.selectUrgency	Dropdown placeholder	Select urgency		
+Report	report.confidentiality.heading	Section heading	Confidentiality note		
+Report	report.confidentiality.copy	Confidentiality guidance	Avoid sharing details that would reveal your identity unless you want investigators to have that information.		
+Report	report.confidentiality.accept	Required checkbox label	I understand how confidentiality works in this portal.		
+Report	report.consent.accept	Required checkbox label	I confirm that this report is submitted in good faith.		
+Report	report.back	Button label	Back		
+Report	report.submitting	Button loading label	Submitting...		
+Report	report.submit	Button label	Submit report		
+Report	report.submitError	Error message	Unable to submit report.		
+Report	report.evidenceTooMany	File upload validation. Preserve {count}.	Upload up to {count} evidence files.		
+Report	report.evidenceTooLarge	File upload validation	Each evidence file must be 10 MB or smaller.		
+Confirmation	confirmation.eyebrow	Small label above confirmation heading	Report received		
+Confirmation	confirmation.title	Confirmation page heading	Your case has been created.		
+Confirmation	confirmation.lede	Confirmation guidance	Keep these details somewhere safe. They are the only way to access your anonymous case later.		
+Confirmation	confirmation.caseId	Label for generated case ID	Case ID		
+Confirmation	confirmation.secret	Label for generated secret	Secret		
+Confirmation	confirmation.submittedAt	Label for submission timestamp	Submitted at		
+Confirmation	confirmation.emailTitle	Email capture card heading	Receive updates about your report by email		
+Confirmation	confirmation.emailDescription	Email capture card description	Add an email if you want your case details sent to you for follow-up later.		
+Confirmation	confirmation.missing	Fallback message if confirmation page has no submission state	No submission details were found in this session. Once the backend is connected, this page should be reached from a successful form submission.		
+Confirmation	confirmation.track	Button label	Track this case		
+Confirmation	confirmation.submitAnother	Button label	Submit another report		
+Confirmation	confirmation.home	Button label	Return home		
+Track	track.eyebrow	Small label above track page heading	Secure follow-up		
+Track	track.title	Track page heading	Track an existing case		
+Track	track.lede	Track page intro paragraph	Enter the case ID and secret you received after submitting your report. This view stays anonymous and only exposes your case data.		
+Track	track.caseId	Field label	Case ID		
+Track	track.secret	Field label	Secret		
+Track	track.opening	Button loading label	Opening case...		
+Track	track.access	Button label	Access case		
+Track	track.error	Error message	Unable to access the case.		
+Track	track.badgeCase	Case badge. Preserve {caseId}.	Case: {caseId}		
+Track	track.submissionTracking	Section heading	Submission tracking		
+Track	track.workflowCopy	Workflow explanation	Your report is recorded in the SVH SpeakUp workflow. Activity appears below as investigators update the case.		
+Track	track.summary	Card heading	Case summary		
+Track	track.category	Case summary label	Category		
+Track	track.submitted	Case summary label	Submitted		
+Track	track.lastActivity	Case summary label	Last activity		
+Track	track.emailUpdates	Case summary label	Email updates		
+Track	track.notAdded	Empty value label	Not added yet		
+Track	track.emailTitle	Email card heading	Add or update your follow-up email		
+Track	track.emailDescription	Email card description	Use the same secure case credentials to add or update the email address used for follow-up.		
+Track	track.notProvided	Empty value label	Not provided		
+Track	track.incidentDate	Case detail label	Incident date		
+Track	track.location	Case detail label	Location		
+Track	track.people	Case detail label	People involved		
+Track	track.evidence	Case detail label	Evidence notes		
+Track	track.escalationContext	Case detail section heading	Presidential escalation context		
+Track	track.raisedChannels	Case detail label	Raised through normal channels		
+Track	track.potentialImpact	Case detail label	Potential impact		
+Track	track.urgency	Case detail label	Urgency		
+Track	track.localAction	Case detail label	Local action summary		
+Track	track.otherDetail	Case detail label	Other escalation detail		
+Track	track.updatesEyebrow	Small section label	Secure updates		
+Track	track.timeline	Section heading	Activity timeline		
+Track	track.protected	Badge or label	End-to-end protected		
+Track	track.note	Informational note	Messaging can be added next once the Dataverse message table is enabled. This view is already wired to the live case and audit records.		
+Email	email.placeholder	Email field placeholder	name@example.com		
+Email	email.saving	Button loading label	Saving...		
+Email	email.update	Button label	Update email		
+Email	email.save	Button label	Save email		
+Email	email.error	Error message	Unable to save email.		
+Email	email.ethereal	Local test email message	Your case details were sent to a local test inbox.		
+Email	email.openPreview	Link label	Open email preview		
+Email	email.sent	Success message	Your case details were emailed to this address.		
+Email	email.notConfigured	Status message	Your email was saved, but email delivery is not configured yet.		
+Progress	progress.received.label	Progress step label	Received		
+Progress	progress.received.description	Progress step description	Your submission has been recorded.		
+Progress	progress.investigation.label	Progress step label	Investigation		
+Progress	progress.investigation.description	Progress step description	The case is currently under review.		
+Progress	progress.action.label	Progress step label	Action taken		
+Progress	progress.action.description	Progress step description	A final action or resolution has been recorded.		
+Activity	actor.reporter	Timeline actor label	Reporter activity		
+Activity	actor.investigator	Timeline actor label	Investigator activity		
+Common	common.yes	Common boolean display	Yes		
+Common	common.no	Common boolean display	No		
+Category	categoryLabel.fraud	Older Dataverse category label	Fraud		
+Category	categoryLabel.corruption	Older Dataverse category label	Corruption		
+Category	categoryLabel.misconduct	Older Dataverse category label	Misconduct		
+Category	categoryLabel.other	Older Dataverse category label	Other		
+Category	categoryLabel.harassment	Older Dataverse category label	Harassment		
+Category	categoryLabel.fraud_theft_financial_misconduct	Dataverse category label	Fraud, Theft & Financial Misconduct		
+Category	categoryLabel.harassment_bullying_workplace_misconduct	Dataverse category label	Harassment, Bullying & Workplace Misconduct		
+Category	categoryLabel.discrimination_human_rights	Dataverse category label	Discrimination & Human Rights Concerns		
+Category	categoryLabel.health_safety_environmental	Dataverse category label	Health, Safety & Environmental Concerns		
+Category	categoryLabel.legal_regulatory_policy	Dataverse category label	Legal, Regulatory & Policy Violations		
+Category	categoryLabel.procurement_vendor_ethics	Dataverse category label	Procurement, Vendor & Ethics Issues		
+Category	categoryLabel.it_cybersecurity_data_misuse	Dataverse category label	IT, Cybersecurity & Data Misuse		
+Category	categoryLabel.consumer_client_product	Dataverse category label	Consumer, Client & Product Concerns		
+Category	categoryLabel.assets_reputation_damage	Dataverse category label	Damage to Company Assets or Reputation		
+Category	categoryLabel.other_ethical	Dataverse category label	Other Ethical Concerns		
+Escalation	escalation.involving_ceo_or_senior_leadership	Checkbox option	Involving CEO or senior leadership		
+Escalation	escalation.conflict_of_interest_at_leadership_level	Checkbox option	Conflict of interest at leadership level		
+Escalation	escalation.fear_of_retaliation	Checkbox option	Fear of retaliation		
+Escalation	escalation.issue_was_ignored_or_mishandled_locally	Checkbox option	Issue was ignored or mishandled locally		
+Escalation	escalation.significant_risk_level_on_venture	Checkbox option	Significant risk level on venture		
+Escalation	escalation.cross_venture_impact	Checkbox option	Cross-venture impact		
+Escalation	escalation.other	Checkbox option	Other		
+Impact	impact.low	Dropdown option	Low		
+Impact	impact.medium	Dropdown option	Medium		
+Impact	impact.high	Dropdown option	High		
+Urgency	urgency.immediate_24_hrs	Dropdown option	Immediate (24 hrs)		
+Urgency	urgency.high_few_days	Dropdown option	High (few days)		
+Urgency	urgency.moderate	Dropdown option	Moderate		
+Urgency	urgency.low	Dropdown option	Low		
+Validation	error.title_min	Validation error	Enter a title with at least 5 characters.		
+Validation	error.description_min	Validation error	Enter a description with at least 15 characters.		
+Validation	error.raised_channels_required	Validation error	Select whether the issue has already been raised through normal channels.		
+Validation	error.escalation_reason_required	Validation error	Select at least one reason for presidential escalation.		
+Validation	error.impact_required	Validation error	Select the potential impact if the issue is not addressed.		
+Validation	error.urgency_required	Validation error	Select the urgency for this issue.		
+Validation	error.confidentiality_required	Validation error	You need to acknowledge the confidentiality notice.		
+Validation	error.good_faith_required	Validation error	You need to confirm the report is submitted in good faith.		
+Validation	error.local_action_required	Validation error	Summarize what action was taken or not taken.		

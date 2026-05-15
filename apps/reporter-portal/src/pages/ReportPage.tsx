@@ -8,16 +8,15 @@ import type {
 } from "@svh/types";
 import {
   createReportSchema,
-  potentialImpactLabels,
   potentialImpactValues,
-  presidentialEscalationFactorLabels,
   presidentialEscalationFactorValues,
-  urgencyLabels,
   urgencyValues
 } from "@svh/types";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
+import { LanguageToggle } from "../components/LanguageToggle";
+import { useLanguage } from "../i18n";
 import { createReport, getReporterFormOptions } from "../lib/api";
 
 type ReportFormValues = Omit<
@@ -46,6 +45,14 @@ const maxEvidenceFileSizeBytes = 10 * 1024 * 1024;
 
 export function ReportPage() {
   const navigate = useNavigate();
+  const {
+    t,
+    translateCategoryLabel,
+    translateEscalationFactor,
+    translatePotentialImpact,
+    translateUrgency,
+    translateError
+  } = useLanguage();
   const [categoryOptions, setCategoryOptions] = useState<ReportCategoryOption[]>(
     []
   );
@@ -115,7 +122,7 @@ export function ReportPage() {
         setCategoryOptions(result.categories);
         setOptionsError(
           result.categories.length === 0
-            ? "No report categories are currently available from Dataverse."
+            ? t("report.optionsEmpty")
             : null
         );
 
@@ -135,7 +142,7 @@ export function ReportPage() {
           setOptionsError(
             error instanceof Error
               ? error.message
-              : "Unable to load report categories from Dataverse."
+              : t("report.optionsError")
           );
         }
       } finally {
@@ -169,7 +176,7 @@ export function ReportPage() {
       });
     } catch (error) {
       setSubmitError(
-        error instanceof Error ? error.message : "Unable to submit report."
+        error instanceof Error ? error.message : t("report.submitError")
       );
     }
   });
@@ -197,12 +204,14 @@ export function ReportPage() {
     setEvidenceFiles(acceptedFiles);
 
     if (selectedFiles.length > maxEvidenceFiles) {
-      setEvidenceError(`Upload up to ${maxEvidenceFiles} evidence files.`);
+      setEvidenceError(
+        t("report.evidenceTooMany", { count: maxEvidenceFiles })
+      );
       return;
     }
 
     if (selectedFiles.some((file) => file.size > maxEvidenceFileSizeBytes)) {
-      setEvidenceError("Each evidence file must be 10 MB or smaller.");
+      setEvidenceError(t("report.evidenceTooLarge"));
       return;
     }
 
@@ -253,19 +262,18 @@ export function ReportPage() {
         </Link>
 
         <nav className="topnav">
-          <Link to="/">Home page</Link>
-          <a href="#report-form">New report</a>
+          <Link to="/">{t("nav.home")}</Link>
+          <a href="#report-form">{t("nav.newReport")}</a>
+          <LanguageToggle />
         </nav>
       </header>
 
       <main className="shell narrow report-shell">
         <section className="report-intro">
-          <p className="eyebrow">Anonymous submission</p>
-          <h1>New report</h1>
+          <p className="eyebrow">{t("report.eyebrow")}</p>
+          <h1>{t("report.title")}</h1>
           <p className="lede centered-copy">
-            Submit a concern relating to SVH or one of its ventures. Your
-            report is treated as confidential and can be followed up later with
-            your case ID and secret.
+            {t("report.lede")}
           </p>
         </section>
 
@@ -274,7 +282,7 @@ export function ReportPage() {
           id="report-form"
           onSubmit={handleFormSubmit}
         >
-          <div className="form-stepper" aria-label="Report submission steps">
+          <div className="form-stepper" aria-label={t("report.steps.aria")}>
             <div
               className={`form-step-card${currentStep === 1 ? " active" : ""}${
                 currentStep > 1 ? " complete" : ""
@@ -282,15 +290,15 @@ export function ReportPage() {
             >
               <span className="form-step-index">1</span>
               <div>
-                <strong>Report details</strong>
-                <p>Share what happened and where.</p>
+                <strong>{t("report.step1.title")}</strong>
+                <p>{t("report.step1.copy")}</p>
               </div>
             </div>
             <div className={`form-step-card${currentStep === 2 ? " active" : ""}`}>
               <span className="form-step-index">2</span>
               <div>
-                <strong>Escalation &amp; submit</strong>
-                <p>Add urgency context and confirm submission.</p>
+                <strong>{t("report.step2.title")}</strong>
+                <p>{t("report.step2.copy")}</p>
               </div>
             </div>
           </div>
@@ -299,98 +307,103 @@ export function ReportPage() {
             <>
               <section className="form-step-panel">
                 <div className="section-head-inline">
-                  <p className="eyebrow">Step 1 of 2</p>
-                  <h2>Report details</h2>
+                  <p className="eyebrow">{t("report.step1.eyebrow")}</p>
+                  <h2>{t("report.step1.heading")}</h2>
                   <p className="step-copy">
-                    Start with the core facts so investigators can understand
-                    the concern before they review escalation context.
+                    {t("report.step1.help")}
                   </p>
                 </div>
 
                 <div className="form-grid">
                   <label className="field">
-                    <span>Category</span>
+                    <span>{t("report.category")}</span>
                     <select
                       disabled={isLoadingOptions || categoryOptions.length === 0}
                       {...form.register("category")}
                     >
                       <option disabled value="">
                         {isLoadingOptions
-                          ? "Loading categories..."
-                          : "Select a category"}
+                          ? t("report.loadingCategories")
+                          : t("report.selectCategory")}
                       </option>
                       {categoryOptions.map((category) => (
                         <option key={category.value} value={category.value}>
-                          {category.label}
+                          {translateCategoryLabel(category.label)}
                         </option>
                       ))}
                     </select>
-                    <FieldError message={form.formState.errors.category?.message} />
+                    <FieldError
+                      message={translateError(form.formState.errors.category?.message)}
+                    />
                   </label>
 
                   <label className="field field-span-2">
-                    <span>Title</span>
+                    <span>{t("report.titleField")}</span>
                     <input
-                      placeholder="Short summary of the concern"
+                      placeholder={t("report.titlePlaceholder")}
                       {...form.register("title")}
                     />
-                    <FieldError message={form.formState.errors.title?.message} />
+                    <p className="field-hint">{t("report.titleHint")}</p>
+                    <FieldError
+                      message={translateError(form.formState.errors.title?.message)}
+                    />
                   </label>
 
                   <label className="field field-span-2">
-                    <span>Description</span>
+                    <span>{t("report.description")}</span>
                     <textarea
                       rows={7}
-                      placeholder="Describe what happened as concisely as you can. Investigators can follow up later."
+                      placeholder={t("report.descriptionPlaceholder")}
                       {...form.register("description")}
                     />
+                    <p className="field-hint">{t("report.descriptionHint")}</p>
                     <FieldError
-                      message={form.formState.errors.description?.message}
+                      message={translateError(form.formState.errors.description?.message)}
                     />
                   </label>
 
                   <label className="field">
-                    <span>When did it happen?</span>
+                    <span>{t("report.when")}</span>
                     <input
                       type="datetime-local"
                       {...form.register("incidentDateText")}
                     />
                     <FieldError
-                      message={form.formState.errors.incidentDateText?.message}
+                      message={translateError(form.formState.errors.incidentDateText?.message)}
                     />
                   </label>
 
                   <label className="field">
-                    <span>Where did it happen?</span>
+                    <span>{t("report.where")}</span>
                     <input
-                      placeholder="For example: Nairobi office"
+                      placeholder={t("report.wherePlaceholder")}
                       {...form.register("locationText")}
                     />
                     <FieldError
-                      message={form.formState.errors.locationText?.message}
+                      message={translateError(form.formState.errors.locationText?.message)}
                     />
                   </label>
 
                   <label className="field field-span-2">
-                    <span>People involved</span>
+                    <span>{t("report.people")}</span>
                     <textarea
                       rows={3}
-                      placeholder="Optional names, roles, or descriptors"
+                      placeholder={t("report.peoplePlaceholder")}
                       {...form.register("peopleInvolved")}
                     />
                   </label>
 
                   <label className="field field-span-2">
-                    <span>Evidence notes</span>
+                    <span>{t("report.evidenceNotes")}</span>
                     <textarea
                       rows={3}
-                      placeholder="Optional notes about files, screenshots, or witnesses"
+                      placeholder={t("report.evidenceNotesPlaceholder")}
                       {...form.register("evidenceNotes")}
                     />
                   </label>
 
                   <label className="field field-span-2">
-                    <span>Evidence files</span>
+                    <span>{t("report.evidenceFiles")}</span>
                     <input
                       accept=".pdf,.png,.jpg,.jpeg,.doc,.docx,.xls,.xlsx,.txt,.eml,.msg,image/*,application/pdf"
                       multiple
@@ -398,7 +411,7 @@ export function ReportPage() {
                       type="file"
                     />
                     <p className="field-hint">
-                      Up to {maxEvidenceFiles} files, 10 MB each.
+                      {t("report.evidenceHint", { count: maxEvidenceFiles })}
                     </p>
                     {evidenceFiles.length > 0 ? (
                       <ul className="file-list">
@@ -419,14 +432,14 @@ export function ReportPage() {
 
               <div className="submit-row step-actions">
                 <div className="step-actions-copy">
-                  Continue to add escalation and urgency details.
+                  {t("report.continueCopy")}
                 </div>
                 <button
                   className="button primary"
                   disabled={isLoadingOptions || categoryOptions.length === 0}
                   type="submit"
                 >
-                  Next step
+                  {t("report.next")}
                 </button>
               </div>
             </>
@@ -434,23 +447,22 @@ export function ReportPage() {
             <>
               <section className="form-step-panel">
                 <div className="section-head-inline">
-                  <p className="eyebrow">Step 2 of 2</p>
-                  <h2>Escalation, impact, and submit</h2>
+                  <p className="eyebrow">{t("report.step2.eyebrow")}</p>
+                  <h2>{t("report.step2.heading")}</h2>
                   <p className="step-copy">
-                    Clarify why this needs higher attention, then confirm the
-                    confidentiality and good-faith statements before sending.
+                    {t("report.step2.help")}
                   </p>
                 </div>
 
                 <section className="form-section form-section-first">
                   <div className="section-head-inline">
-                    <p className="eyebrow">Escalation</p>
-                    <h2>Justification for Presidential Escalation</h2>
+                    <p className="eyebrow">{t("report.escalation.eyebrow")}</p>
+                    <h2>{t("report.escalation.heading")}</h2>
                   </div>
 
                   <div className="form-grid">
                     <label className="field">
-                      <span>Has this issue been raised through normal channels?</span>
+                      <span>{t("report.raisedChannels")}</span>
                       <select
                         {...form.register("raisedThroughNormalChannels", {
                           setValueAs: (value) =>
@@ -461,31 +473,35 @@ export function ReportPage() {
                                 : undefined
                         })}
                       >
-                        <option value="">Select yes or no</option>
-                        <option value="true">Yes</option>
-                        <option value="false">No</option>
+                        <option value="">{t("report.selectYesNo")}</option>
+                        <option value="true">{t("report.yes")}</option>
+                        <option value="false">{t("report.no")}</option>
                       </select>
                       <FieldError
                         message={
-                          form.formState.errors.raisedThroughNormalChannels
-                            ?.message
+                          translateError(
+                            form.formState.errors.raisedThroughNormalChannels
+                              ?.message
+                          )
                         }
                       />
                     </label>
 
                     {raisedThroughNormalChannels === true ? (
                       <label className="field field-span-2">
-                        <span>If yes, what action was taken or not taken?</span>
+                        <span>{t("report.localAction")}</span>
                         <textarea
                           maxLength={100}
                           rows={3}
-                          placeholder="Summarize what happened after raising it locally."
+                          placeholder={t("report.localActionPlaceholder")}
                           {...form.register("normalChannelActionSummary")}
                         />
                         <FieldError
                           message={
-                            form.formState.errors.normalChannelActionSummary
-                              ?.message
+                            translateError(
+                              form.formState.errors.normalChannelActionSummary
+                                ?.message
+                            )
                           }
                         />
                       </label>
@@ -493,7 +509,7 @@ export function ReportPage() {
 
                     <div className="field field-span-2">
                       <span>
-                        Why should this be escalated directly to the President?
+                        {t("report.escalationReason")}
                       </span>
                       <div className="checkbox-card-grid">
                         {presidentialEscalationFactorValues.map((factor) => (
@@ -511,15 +527,17 @@ export function ReportPage() {
                               type="checkbox"
                             />
                             <span className="checkbox-card-label">
-                              {presidentialEscalationFactorLabels[factor]}
+                              {translateEscalationFactor(factor)}
                             </span>
                           </label>
                         ))}
                       </div>
                       <FieldError
                         message={
-                          form.formState.errors.presidentialEscalationFactors
-                            ?.message
+                          translateError(
+                            form.formState.errors.presidentialEscalationFactors
+                              ?.message
+                          )
                         }
                       />
                     </div>
@@ -529,46 +547,49 @@ export function ReportPage() {
 
                 <section className="form-section">
                   <div className="section-head-inline">
-                    <p className="eyebrow">Impact</p>
-                    <h2>Impact &amp; Urgency</h2>
+                    <p className="eyebrow">{t("report.impact.eyebrow")}</p>
+                    <h2>{t("report.impact.heading")}</h2>
                   </div>
 
                   <div className="form-grid">
                     <label className="field">
-                      <span>Potential impact if not addressed</span>
+                      <span>{t("report.potentialImpact")}</span>
                       <select {...form.register("potentialImpact")}>
-                        <option value="">Select impact level</option>
+                        <option value="">{t("report.selectImpact")}</option>
                         {potentialImpactValues.map((impact) => (
                           <option key={impact} value={impact}>
-                            {potentialImpactLabels[impact]}
+                            {translatePotentialImpact(impact)}
                           </option>
                         ))}
                       </select>
                       <FieldError
-                        message={form.formState.errors.potentialImpact?.message}
+                        message={translateError(
+                          form.formState.errors.potentialImpact?.message
+                        )}
                       />
                     </label>
 
                     <label className="field">
-                      <span>Urgency</span>
+                      <span>{t("report.urgency")}</span>
                       <select {...form.register("urgency")}>
-                        <option value="">Select urgency</option>
+                        <option value="">{t("report.selectUrgency")}</option>
                         {urgencyValues.map((urgency) => (
                           <option key={urgency} value={urgency}>
-                            {urgencyLabels[urgency]}
+                            {translateUrgency(urgency)}
                           </option>
                         ))}
                       </select>
-                      <FieldError message={form.formState.errors.urgency?.message} />
+                      <FieldError
+                        message={translateError(form.formState.errors.urgency?.message)}
+                      />
                     </label>
                   </div>
                 </section>
 
                 <div className="notice-block">
-                  <h2>Confidentiality note</h2>
+                  <h2>{t("report.confidentiality.heading")}</h2>
                   <p>
-                    Avoid sharing details that would reveal your identity unless
-                    you want investigators to have that information.
+                    {t("report.confidentiality.copy")}
                   </p>
                 </div>
 
@@ -577,18 +598,22 @@ export function ReportPage() {
                     type="checkbox"
                     {...form.register("confidentialityAccepted")}
                   />
-                  <span>I understand how confidentiality works in this portal.</span>
+                  <span>{t("report.confidentiality.accept")}</span>
                 </label>
                 <FieldError
-                  message={form.formState.errors.confidentialityAccepted?.message}
+                  message={translateError(
+                    form.formState.errors.confidentialityAccepted?.message
+                  )}
                 />
 
                 <label className="checkbox">
                   <input type="checkbox" {...form.register("consentAccepted")} />
-                  <span>I confirm that this report is submitted in good faith.</span>
+                  <span>{t("report.consent.accept")}</span>
                 </label>
                 <FieldError
-                  message={form.formState.errors.consentAccepted?.message}
+                  message={translateError(
+                    form.formState.errors.consentAccepted?.message
+                  )}
                 />
               </section>
 
@@ -600,14 +625,16 @@ export function ReportPage() {
                   onClick={goBackToDetailsStep}
                   type="button"
                 >
-                  Back
+                  {t("report.back")}
                 </button>
                 <button
                   className="button primary"
                   disabled={form.formState.isSubmitting}
                   type="submit"
                 >
-                  {form.formState.isSubmitting ? "Submitting..." : "Submit report"}
+                  {form.formState.isSubmitting
+                    ? t("report.submitting")
+                    : t("report.submit")}
                 </button>
               </div>
             </>

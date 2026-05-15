@@ -73,6 +73,32 @@ textarea {
   text-decoration: none;
 }
 
+.language-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.2rem;
+  border: 1px solid rgba(17, 32, 59, 0.14);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.language-toggle button {
+  min-height: 32px;
+  padding: 0.3rem 0.65rem;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: #21456f;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.language-toggle button.active {
+  background: #163d69;
+  color: #ffffff;
+}
+
 .hero {
   position: relative;
   overflow: hidden;

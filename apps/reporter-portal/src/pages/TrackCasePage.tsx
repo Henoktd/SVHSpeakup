@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import type { ReporterCaseAccessResponse } from "@svh/types";
 import { Link, useLocation } from "react-router-dom";
+import { LanguageToggle } from "../components/LanguageToggle";
+import { ReporterEmailCaptureCard } from "../components/ReporterEmailCaptureCard";
+import { useLanguage } from "../i18n";
 import { accessReporterCase } from "../lib/api";
 
 interface TrackCaseLocationState {
@@ -12,6 +15,7 @@ const progressSteps = ["received", "investigation", "action_taken"] as const;
 
 export function TrackCasePage() {
   const location = useLocation();
+  const { t, translateCategoryLabel } = useLanguage();
   const locationState = (location.state as TrackCaseLocationState | null) ?? null;
   const [caseId, setCaseId] = useState(locationState?.caseId ?? "");
   const [secret, setSecret] = useState(locationState?.secret ?? "");
@@ -47,7 +51,7 @@ export function TrackCasePage() {
       setError(
         accessError instanceof Error
           ? accessError.message
-          : "Unable to access the case."
+          : t("track.error")
       );
     } finally {
       setIsLoading(false);
@@ -64,25 +68,25 @@ export function TrackCasePage() {
         </Link>
 
         <nav className="topnav">
-          <Link to="/report">New report</Link>
-          <Link to="/track">Track case</Link>
+          <Link to="/report">{t("nav.newReport")}</Link>
+          <Link to="/track">{t("nav.track")}</Link>
+          <LanguageToggle />
         </nav>
       </header>
 
       <main className="shell narrow tracker-shell">
         <section className="tracker-hero">
-          <p className="eyebrow">Secure follow-up</p>
-          <h1>Track an existing case</h1>
+          <p className="eyebrow">{t("track.eyebrow")}</p>
+          <h1>{t("track.title")}</h1>
           <p className="lede centered-copy">
-            Enter the case ID and secret you received after submitting your
-            report. This view stays anonymous and only exposes your case data.
+            {t("track.lede")}
           </p>
         </section>
 
         <section className="tracker-access-card">
           <div className="tracker-access-grid">
             <label className="field">
-              <span>Case ID</span>
+              <span>{t("track.caseId")}</span>
               <input
                 onChange={(event) => setCaseId(event.target.value)}
                 placeholder="SVH-2026-000124"
@@ -90,7 +94,7 @@ export function TrackCasePage() {
               />
             </label>
             <label className="field">
-              <span>Secret</span>
+              <span>{t("track.secret")}</span>
               <input
                 onChange={(event) => setSecret(event.target.value)}
                 placeholder="RIVER-GLASS-4821"
@@ -105,7 +109,7 @@ export function TrackCasePage() {
               onClick={() => void handleAccess()}
               type="button"
             >
-              {isLoading ? "Opening case..." : "Access case"}
+              {isLoading ? t("track.opening") : t("track.access")}
             </button>
           </div>
           {error ? <p className="error-banner">{error}</p> : null}
@@ -115,14 +119,15 @@ export function TrackCasePage() {
           <section className="tracker-layout">
             <article className="tracker-panel">
               <div className="tracker-badges">
-                <span className="tracker-badge">Case: {caseData.caseId}</span>
+                <span className="tracker-badge">
+                  {t("track.badgeCase", { caseId: caseData.caseId })}
+                </span>
                 <span className="tracker-badge muted">{caseData.statusLabel}</span>
               </div>
 
-              <h2>Submission tracking</h2>
+              <h2>{t("track.submissionTracking")}</h2>
               <p className="lede">
-                Your report is recorded in the SVH SpeakUp workflow. Activity
-                appears below as investigators update the case.
+                {t("track.workflowCopy")}
               </p>
 
               <div className="tracker-progress-card">
@@ -135,8 +140,8 @@ export function TrackCasePage() {
                     >
                       <div className="tracker-progress-index">{index + 1}</div>
                       <div>
-                        <strong>{formatProgressLabel(step)}</strong>
-                        <p>{formatProgressDescription(step)}</p>
+                        <strong>{formatProgressLabel(step, t)}</strong>
+                        <p>{formatProgressDescription(step, t)}</p>
                       </div>
                     </div>
                   );
@@ -145,25 +150,43 @@ export function TrackCasePage() {
             </article>
 
             <article className="tracker-panel">
-              <h2>Case summary</h2>
+              <h2>{t("track.summary")}</h2>
               <dl className="tracker-summary-grid">
                 <div>
-                  <dt>Category</dt>
-                  <dd>{caseData.categoryLabel}</dd>
+                  <dt>{t("track.category")}</dt>
+                  <dd>{translateCategoryLabel(caseData.categoryLabel)}</dd>
                 </div>
                 <div>
-                  <dt>Submitted</dt>
+                  <dt>{t("track.submitted")}</dt>
                   <dd>{formatDateTime(caseData.submittedAt)}</dd>
                 </div>
                 <div>
-                  <dt>Last activity</dt>
+                  <dt>{t("track.lastActivity")}</dt>
                   <dd>{formatDateTime(caseData.lastActivityAt)}</dd>
                 </div>
                 <div>
-                  <dt>Email updates</dt>
-                  <dd>{caseData.reporterEmail ?? "Not added yet"}</dd>
+                  <dt>{t("track.emailUpdates")}</dt>
+                  <dd>{caseData.reporterEmail ?? t("track.notAdded")}</dd>
                 </div>
               </dl>
+
+              <ReporterEmailCaptureCard
+                caseId={caseData.caseId}
+                description={t("track.emailDescription")}
+                initialEmail={caseData.reporterEmail}
+                onSaved={(email) =>
+                  setCaseData((currentCaseData) =>
+                    currentCaseData
+                      ? {
+                          ...currentCaseData,
+                          reporterEmail: email
+                        }
+                      : currentCaseData
+                  )
+                }
+                secret={secret}
+                title={t("track.emailTitle")}
+              />
 
               <div className="tracker-narrative">
                 <h3>{caseData.title}</h3>
@@ -172,51 +195,51 @@ export function TrackCasePage() {
 
               <div className="tracker-detail-grid">
                 <div>
-                  <span>Incident date</span>
+                  <span>{t("track.incidentDate")}</span>
                   <strong>
                     {caseData.incidentDateText
                       ? formatDateTime(caseData.incidentDateText)
-                      : "Not provided"}
+                      : t("track.notProvided")}
                   </strong>
                 </div>
                 <div>
-                  <span>Location</span>
-                  <strong>{caseData.locationText || "Not provided"}</strong>
+                  <span>{t("track.location")}</span>
+                  <strong>{caseData.locationText || t("track.notProvided")}</strong>
                 </div>
                 <div>
-                  <span>People involved</span>
-                  <strong>{caseData.peopleInvolved || "Not provided"}</strong>
+                  <span>{t("track.people")}</span>
+                  <strong>{caseData.peopleInvolved || t("track.notProvided")}</strong>
                 </div>
                 <div>
-                  <span>Evidence notes</span>
-                  <strong>{caseData.evidenceNotes || "Not provided"}</strong>
+                  <span>{t("track.evidence")}</span>
+                  <strong>{caseData.evidenceNotes || t("track.notProvided")}</strong>
                 </div>
               </div>
 
               <section className="tracker-narrative tracker-narrative-secondary">
-                <h3>Presidential escalation context</h3>
+                <h3>{t("track.escalationContext")}</h3>
                 <p>{caseData.presidentialEscalationReason}</p>
               </section>
 
               <div className="tracker-detail-grid">
                 <div>
-                  <span>Raised through normal channels</span>
+                  <span>{t("track.raisedChannels")}</span>
                   <strong>
-                    {formatBooleanLabel(caseData.raisedThroughNormalChannels)}
+                    {formatBooleanLabel(caseData.raisedThroughNormalChannels, t)}
                   </strong>
                 </div>
                 <div>
-                  <span>Potential impact</span>
-                  <strong>{caseData.potentialImpactLabel || "Not provided"}</strong>
+                  <span>{t("track.potentialImpact")}</span>
+                  <strong>{caseData.potentialImpactLabel || t("track.notProvided")}</strong>
                 </div>
                 <div>
-                  <span>Urgency</span>
-                  <strong>{caseData.urgencyLabel || "Not provided"}</strong>
+                  <span>{t("track.urgency")}</span>
+                  <strong>{caseData.urgencyLabel || t("track.notProvided")}</strong>
                 </div>
                 <div>
-                  <span>Local action summary</span>
+                  <span>{t("track.localAction")}</span>
                   <strong>
-                    {caseData.normalChannelActionSummary || "Not provided"}
+                    {caseData.normalChannelActionSummary || t("track.notProvided")}
                   </strong>
                 </div>
               </div>
@@ -231,7 +254,7 @@ export function TrackCasePage() {
 
               {caseData.presidentialEscalationOtherDetail ? (
                 <div className="tracker-narrative tracker-narrative-secondary">
-                  <h3>Other escalation detail</h3>
+                  <h3>{t("track.otherDetail")}</h3>
                   <p>{caseData.presidentialEscalationOtherDetail}</p>
                 </div>
               ) : null}
@@ -240,11 +263,11 @@ export function TrackCasePage() {
             <article className="tracker-panel tracker-panel-wide">
               <div className="tracker-panel-head">
                 <div>
-                  <p className="eyebrow">Secure updates</p>
-                  <h2>Activity timeline</h2>
+                  <p className="eyebrow">{t("track.updatesEyebrow")}</p>
+                  <h2>{t("track.timeline")}</h2>
                 </div>
                 <span className="tracker-session-tag">
-                  End-to-end protected
+                  {t("track.protected")}
                 </span>
               </div>
 
@@ -254,7 +277,7 @@ export function TrackCasePage() {
                     <div className="tracker-timeline-marker" />
                     <div className="tracker-timeline-body">
                       <p className="tracker-timeline-meta">
-                        {formatActor(event.actorType)} · {formatDateTime(event.createdAt)}
+                        {formatActor(event.actorType, t)} · {formatDateTime(event.createdAt)}
                       </p>
                       <p>{event.summary}</p>
                     </div>
@@ -263,9 +286,7 @@ export function TrackCasePage() {
               </div>
 
               <p className="tracker-note">
-                Messaging can be added next once the Dataverse message table is
-                enabled. This view is already wired to the live case and audit
-                records.
+                {t("track.note")}
               </p>
             </article>
           </section>
@@ -275,13 +296,13 @@ export function TrackCasePage() {
   );
 }
 
-function formatActor(actorType: string) {
+function formatActor(actorType: string, t: ReturnType<typeof useLanguage>["t"]) {
   if (actorType === "reporter") {
-    return "Reporter activity";
+    return t("actor.reporter");
   }
 
   if (actorType === "investigator") {
-    return "Investigator activity";
+    return t("actor.investigator");
   }
 
   return actorType.replace(/_/g, " ");
@@ -297,24 +318,38 @@ function formatDateTime(value: string) {
   return parsedDate.toLocaleString();
 }
 
-function formatProgressDescription(step: (typeof progressSteps)[number]) {
+function formatProgressDescription(
+  step: (typeof progressSteps)[number],
+  t: ReturnType<typeof useLanguage>["t"]
+) {
   if (step === "received") {
-    return "Your submission has been recorded.";
+    return t("progress.received.description");
   }
 
   if (step === "investigation") {
-    return "The case is currently under review.";
+    return t("progress.investigation.description");
   }
 
-  return "A final action or resolution has been recorded.";
+  return t("progress.action.description");
 }
 
-function formatProgressLabel(step: (typeof progressSteps)[number]) {
-  if (step === "action_taken") {
-    return "Action taken";
+function formatProgressLabel(
+  step: (typeof progressSteps)[number],
+  t: ReturnType<typeof useLanguage>["t"]
+) {
+  if (step === "received") {
+    return t("progress.received.label");
   }
 
-  return step.charAt(0).toUpperCase() + step.slice(1);
+  if (step === "investigation") {
+    return t("progress.investigation.label");
+  }
+
+  if (step === "action_taken") {
+    return t("progress.action.label");
+  }
+
+  return t("progress.action.label");
 }
 
 function getActiveStep(status: ReporterCaseAccessResponse["status"] | undefined) {
@@ -329,6 +364,9 @@ function getActiveStep(status: ReporterCaseAccessResponse["status"] | undefined)
   return 2;
 }
 
-function formatBooleanLabel(value: boolean) {
-  return value ? "Yes" : "No";
+function formatBooleanLabel(
+  value: boolean,
+  t: ReturnType<typeof useLanguage>["t"]
+) {
+  return value ? t("common.yes") : t("common.no");
 }
